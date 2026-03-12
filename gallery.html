@@ -78,258 +78,107 @@
       <button class="gallery-cat-btn" data-category="delivery">Delivery</button>
     </div>
 
-    <!-- Gallery Grid -->
+    <!--
+      ============================================================
+      GALLERY GRID — HOW TO UPDATE
+      ============================================================
+      To replace a placeholder with a real photo:
+        1. Drop your image into the "images/" folder
+        2. Name it to match (e.g. images/gallery-01.jpg)
+        3. The <img> tag below already points there — just push!
+
+      To ADD a new gallery item, copy this template:
+
+        <div class="gallery-item reveal" data-category="roof">
+          <img src="images/gallery-XX.jpg" alt="Description here">
+          <div class="gallery-overlay"><span>Title Here</span></div>
+        </div>
+
+      Categories: roof | floor | custom | delivery
+      ============================================================
+    -->
     <div class="gallery-grid">
 
-      <!-- 1. Residential Roof Truss System -->
+      <!-- 1 -->
       <div class="gallery-item reveal" data-category="roof">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="100,15 15,110 185,110" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="100" y1="15" x2="100" y2="110" stroke="#C8922A" stroke-width="2"/>
-          <line x1="57" y1="62" x2="57" y2="110" stroke="#C8922A" stroke-width="2"/>
-          <line x1="143" y1="62" x2="143" y2="110" stroke="#C8922A" stroke-width="2"/>
-          <line x1="57" y1="62" x2="100" y2="110" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="143" y1="62" x2="100" y2="110" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="15" y1="110" x2="185" y2="110" stroke="#1B4FA0" stroke-width="3"/>
-        </svg>
+        <img src="images/res-roof-truss-system.png" alt="Residential Roof Truss System">
         <div class="gallery-overlay"><span>Residential Roof Truss System</span></div>
       </div>
 
-      <!-- 2. Commercial Roof Assembly -->
-      <div class="gallery-item reveal" data-category="roof">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="10,70 100,30 190,70" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="10" y1="70" x2="190" y2="70" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="10" y1="70" x2="10" y2="115" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="190" y1="70" x2="190" y2="115" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="10" y1="115" x2="190" y2="115" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="55" y1="50" x2="55" y2="70" stroke="#C8922A" stroke-width="2"/>
-          <line x1="100" y1="30" x2="100" y2="70" stroke="#C8922A" stroke-width="2"/>
-          <line x1="145" y1="50" x2="145" y2="70" stroke="#C8922A" stroke-width="2"/>
-          <line x1="55" y1="70" x2="55" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="100" y1="70" x2="100" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="145" y1="70" x2="145" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-        </svg>
+      <!-- 2 -->
+      <div class="gallery-item placeholder reveal" data-category="roof" data-label="Add: gallery-02.jpg">
+        <img src="images/gallery-02.jpg" alt="Commercial Roof Assembly"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Commercial Roof Assembly</span></div>
       </div>
 
-      <!-- 3. Open-Web Floor Trusses -->
-      <div class="gallery-item reveal" data-category="floor">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="10" y1="45" x2="190" y2="45" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="10" y1="95" x2="190" y2="95" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="10" y1="45" x2="10" y2="95" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="190" y1="45" x2="190" y2="95" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="10" y1="95" x2="46" y2="45" stroke="#C8922A" stroke-width="2"/>
-          <line x1="46" y1="45" x2="82" y2="95" stroke="#C8922A" stroke-width="2"/>
-          <line x1="82" y1="95" x2="118" y2="45" stroke="#C8922A" stroke-width="2"/>
-          <line x1="118" y1="45" x2="154" y2="95" stroke="#C8922A" stroke-width="2"/>
-          <line x1="154" y1="95" x2="190" y2="45" stroke="#C8922A" stroke-width="2"/>
-        </svg>
+      <!-- 3 -->
+      <div class="gallery-item placeholder reveal" data-category="floor" data-label="Add: gallery-03.jpg">
+        <img src="images/gallery-03.jpg" alt="Open-Web Floor Trusses"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Open-Web Floor Trusses</span></div>
       </div>
 
-      <!-- 4. Cathedral Ceiling Design -->
-      <div class="gallery-item reveal" data-category="custom">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="100,8 15,125 185,125" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="100" y1="8" x2="100" y2="125" stroke="#C8922A" stroke-width="2"/>
-          <line x1="40" y1="90" x2="160" y2="90" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="58" y1="66" x2="142" y2="66" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="76" y1="42" x2="124" y2="42" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="40" y1="90" x2="58" y2="66" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="160" y1="90" x2="142" y2="66" stroke="#C8922A" stroke-width="1.5"/>
-          <circle cx="100" cy="8" r="4" fill="#C8922A"/>
-        </svg>
+      <!-- 4 -->
+      <div class="gallery-item placeholder reveal" data-category="custom" data-label="Add: gallery-04.jpg">
+        <img src="images/gallery-04.jpg" alt="Cathedral Ceiling Design"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Cathedral Ceiling Design</span></div>
       </div>
 
-      <!-- 5. Truss Delivery to Site -->
-      <div class="gallery-item reveal" data-category="delivery">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Truck body -->
-          <rect x="10" y="50" width="120" height="50" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <!-- Cab -->
-          <polygon points="130,50 130,100 180,100 180,70 160,50" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <!-- Windshield -->
-          <line x1="160" y1="50" x2="180" y2="70" stroke="#C8922A" stroke-width="2"/>
-          <!-- Wheels -->
-          <circle cx="50" cy="105" r="12" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <circle cx="50" cy="105" r="4" fill="#C8922A"/>
-          <circle cx="155" cy="105" r="12" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <circle cx="155" cy="105" r="4" fill="#C8922A"/>
-          <!-- Trusses on bed -->
-          <polygon points="20,50 70,25 120,50" stroke="#C8922A" stroke-width="2" fill="none"/>
-          <polygon points="30,50 70,30 110,50" stroke="#C8922A" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
-        </svg>
+      <!-- 5 -->
+      <div class="gallery-item placeholder reveal" data-category="delivery" data-label="Add: gallery-05.jpg">
+        <img src="images/gallery-05.jpg" alt="Truss Delivery to Site"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Truss Delivery to Site</span></div>
       </div>
 
-      <!-- 6. Hip Roof Configuration -->
-      <div class="gallery-item reveal" data-category="roof">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Main hip shape -->
-          <polygon points="60,25 140,25 185,85 15,85" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="15" y1="85" x2="185" y2="85" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Hip ridge -->
-          <line x1="60" y1="25" x2="140" y2="25" stroke="#C8922A" stroke-width="2.5"/>
-          <!-- Vertical webs -->
-          <line x1="60" y1="25" x2="38" y2="85" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="140" y1="25" x2="162" y2="85" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="100" y1="25" x2="100" y2="85" stroke="#C8922A" stroke-width="2"/>
-          <line x1="60" y1="25" x2="15" y2="85" stroke="#1B4FA0" stroke-width="2"/>
-          <line x1="140" y1="25" x2="185" y2="85" stroke="#1B4FA0" stroke-width="2"/>
-          <!-- Bottom chord supports -->
-          <line x1="15" y1="85" x2="15" y2="115" stroke="#1B4FA0" stroke-width="2"/>
-          <line x1="185" y1="85" x2="185" y2="115" stroke="#1B4FA0" stroke-width="2"/>
-        </svg>
+      <!-- 6 -->
+      <div class="gallery-item placeholder reveal" data-category="roof" data-label="Add: gallery-06.jpg">
+        <img src="images/gallery-06.jpg" alt="Hip Roof Configuration"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Hip Roof Configuration</span></div>
       </div>
 
-      <!-- 7. Multi-Level Roof System -->
-      <div class="gallery-item reveal" data-category="custom">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Lower roof -->
-          <polygon points="10,100 60,60 110,100" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="10" y1="100" x2="110" y2="100" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Upper roof -->
-          <polygon points="90,100 140,35 190,100" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="90" y1="100" x2="190" y2="100" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Webs lower -->
-          <line x1="60" y1="60" x2="60" y2="100" stroke="#C8922A" stroke-width="2"/>
-          <line x1="35" y1="80" x2="35" y2="100" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="85" y1="80" x2="85" y2="100" stroke="#C8922A" stroke-width="1.5"/>
-          <!-- Webs upper -->
-          <line x1="140" y1="35" x2="140" y2="100" stroke="#C8922A" stroke-width="2"/>
-          <line x1="115" y1="67" x2="115" y2="100" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="165" y1="67" x2="165" y2="100" stroke="#C8922A" stroke-width="1.5"/>
-          <!-- Foundation -->
-          <line x1="10" y1="120" x2="190" y2="120" stroke="#1B4FA0" stroke-width="2"/>
-          <line x1="10" y1="100" x2="10" y2="120" stroke="#1B4FA0" stroke-width="2"/>
-          <line x1="190" y1="100" x2="190" y2="120" stroke="#1B4FA0" stroke-width="2"/>
-        </svg>
+      <!-- 7 -->
+      <div class="gallery-item placeholder reveal" data-category="custom" data-label="Add: gallery-07.jpg">
+        <img src="images/gallery-07.jpg" alt="Multi-Level Roof System"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Multi-Level Roof System</span></div>
       </div>
 
-      <!-- 8. Long-Span Floor Truss -->
-      <div class="gallery-item reveal" data-category="floor">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="5" y1="50" x2="195" y2="50" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="5" y1="90" x2="195" y2="90" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="5" y1="50" x2="5" y2="90" stroke="#1B4FA0" stroke-width="2.5"/>
-          <line x1="195" y1="50" x2="195" y2="90" stroke="#1B4FA0" stroke-width="2.5"/>
-          <!-- Diagonal webs -->
-          <line x1="5" y1="90" x2="30" y2="50" stroke="#C8922A" stroke-width="2"/>
-          <line x1="30" y1="50" x2="55" y2="90" stroke="#C8922A" stroke-width="2"/>
-          <line x1="55" y1="90" x2="80" y2="50" stroke="#C8922A" stroke-width="2"/>
-          <line x1="80" y1="50" x2="105" y2="90" stroke="#C8922A" stroke-width="2"/>
-          <line x1="105" y1="90" x2="130" y2="50" stroke="#C8922A" stroke-width="2"/>
-          <line x1="130" y1="50" x2="155" y2="90" stroke="#C8922A" stroke-width="2"/>
-          <line x1="155" y1="90" x2="180" y2="50" stroke="#C8922A" stroke-width="2"/>
-          <line x1="180" y1="50" x2="195" y2="90" stroke="#C8922A" stroke-width="2"/>
-          <!-- Span label line -->
-          <line x1="5" y1="110" x2="195" y2="110" stroke="#C8922A" stroke-width="1" stroke-dasharray="4,4"/>
-          <circle cx="5" cy="110" r="3" fill="#C8922A"/>
-          <circle cx="195" cy="110" r="3" fill="#C8922A"/>
-        </svg>
+      <!-- 8 -->
+      <div class="gallery-item placeholder reveal" data-category="floor" data-label="Add: gallery-08.jpg">
+        <img src="images/gallery-08.jpg" alt="Long-Span Floor Truss"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Long-Span Floor Truss</span></div>
       </div>
 
-      <!-- 9. Gambrel Roof Trusses -->
-      <div class="gallery-item reveal" data-category="roof">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Gambrel (barn-style) shape -->
-          <polyline points="15,115 15,75 55,40 100,18 145,40 185,75 185,115" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <line x1="15" y1="115" x2="185" y2="115" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Internal webs -->
-          <line x1="100" y1="18" x2="100" y2="115" stroke="#C8922A" stroke-width="2"/>
-          <line x1="55" y1="40" x2="55" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="145" y1="40" x2="145" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="15" y1="75" x2="55" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="185" y1="75" x2="145" y2="115" stroke="#C8922A" stroke-width="1.5"/>
-          <!-- Horizontal chord at break point -->
-          <line x1="15" y1="75" x2="185" y2="75" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="6,3"/>
-        </svg>
+      <!-- 9 -->
+      <div class="gallery-item placeholder reveal" data-category="roof" data-label="Add: gallery-09.jpg">
+        <img src="images/gallery-09.jpg" alt="Gambrel Roof Trusses"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Gambrel Roof Trusses</span></div>
       </div>
 
-      <!-- 10. Crane Set in Progress -->
-      <div class="gallery-item reveal" data-category="delivery">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Crane base -->
-          <rect x="20" y="105" width="50" height="20" stroke="#1B4FA0" stroke-width="3" fill="none"/>
-          <!-- Crane tower -->
-          <line x1="45" y1="105" x2="45" y2="20" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Crane boom -->
-          <line x1="45" y1="20" x2="175" y2="20" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Counter jib -->
-          <line x1="45" y1="20" x2="10" y2="20" stroke="#1B4FA0" stroke-width="2"/>
-          <!-- Cable -->
-          <line x1="150" y1="20" x2="150" y2="65" stroke="#C8922A" stroke-width="1.5"/>
-          <!-- Truss being lifted -->
-          <polygon points="120,65 150,50 180,65" stroke="#C8922A" stroke-width="2.5" fill="none"/>
-          <line x1="120" y1="65" x2="180" y2="65" stroke="#C8922A" stroke-width="2"/>
-          <!-- Support cables -->
-          <line x1="10" y1="20" x2="45" y2="50" stroke="#1B4FA0" stroke-width="1.5"/>
-          <line x1="175" y1="20" x2="45" y2="50" stroke="#1B4FA0" stroke-width="1.5"/>
-          <!-- Wheels -->
-          <circle cx="30" cy="128" r="6" stroke="#1B4FA0" stroke-width="2" fill="none"/>
-          <circle cx="60" cy="128" r="6" stroke="#1B4FA0" stroke-width="2" fill="none"/>
-          <!-- Counter weight -->
-          <rect x="5" y="22" width="15" height="10" stroke="#1B4FA0" stroke-width="2" fill="none"/>
-        </svg>
+      <!-- 10 -->
+      <div class="gallery-item placeholder reveal" data-category="delivery" data-label="Add: gallery-10.jpg">
+        <img src="images/gallery-10.jpg" alt="Crane Set in Progress"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Crane Set in Progress</span></div>
       </div>
 
-      <!-- 11. Energy Heel Truss Detail -->
-      <div class="gallery-item reveal" data-category="custom">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Main truss shape with raised heel -->
-          <line x1="10" y1="110" x2="190" y2="110" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Raised heel at left -->
-          <line x1="10" y1="110" x2="10" y2="70" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="10" y1="70" x2="100" y2="25" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Raised heel at right -->
-          <line x1="190" y1="110" x2="190" y2="70" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="190" y1="70" x2="100" y2="25" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Heel detail highlight -->
-          <rect x="5" y="65" width="20" height="50" stroke="#C8922A" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
-          <rect x="175" y="65" width="20" height="50" stroke="#C8922A" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
-          <!-- Webs -->
-          <line x1="100" y1="25" x2="100" y2="110" stroke="#C8922A" stroke-width="2"/>
-          <line x1="55" y1="47" x2="55" y2="110" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="145" y1="47" x2="145" y2="110" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="55" y1="110" x2="100" y2="47" stroke="#C8922A" stroke-width="1.5"/>
-          <line x1="145" y1="110" x2="100" y2="47" stroke="#C8922A" stroke-width="1.5"/>
-          <!-- Arrow pointing to heel -->
-          <circle cx="15" cy="58" r="3" fill="#C8922A"/>
-        </svg>
+      <!-- 11 -->
+      <div class="gallery-item placeholder reveal" data-category="custom" data-label="Add: gallery-11.jpg">
+        <img src="images/gallery-11.jpg" alt="Energy Heel Truss Detail"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Energy Heel Truss Detail</span></div>
       </div>
 
-      <!-- 12. Standard Fink Truss -->
-      <div class="gallery-item reveal" data-category="roof">
-        <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Top chords -->
-          <line x1="15" y1="105" x2="100" y2="25" stroke="#1B4FA0" stroke-width="3"/>
-          <line x1="100" y1="25" x2="185" y2="105" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Bottom chord -->
-          <line x1="15" y1="105" x2="185" y2="105" stroke="#1B4FA0" stroke-width="3"/>
-          <!-- Fink web pattern (W shape) -->
-          <line x1="57" y1="65" x2="15" y2="105" stroke="#C8922A" stroke-width="2"/>
-          <line x1="57" y1="65" x2="100" y2="105" stroke="#C8922A" stroke-width="2"/>
-          <line x1="143" y1="65" x2="100" y2="105" stroke="#C8922A" stroke-width="2"/>
-          <line x1="143" y1="65" x2="185" y2="105" stroke="#C8922A" stroke-width="2"/>
-          <!-- King post -->
-          <line x1="100" y1="25" x2="100" y2="105" stroke="#C8922A" stroke-width="2"/>
-          <!-- Joint circles -->
-          <circle cx="100" cy="25" r="4" fill="#C8922A"/>
-          <circle cx="15" cy="105" r="4" fill="#1B4FA0"/>
-          <circle cx="185" cy="105" r="4" fill="#1B4FA0"/>
-          <circle cx="100" cy="105" r="3" fill="#C8922A"/>
-          <circle cx="57" cy="65" r="3" fill="#C8922A"/>
-          <circle cx="143" cy="65" r="3" fill="#C8922A"/>
-        </svg>
+      <!-- 12 -->
+      <div class="gallery-item placeholder reveal" data-category="roof" data-label="Add: gallery-12.jpg">
+        <img src="images/gallery-12.jpg" alt="Standard Fink Truss"
+             onerror="this.style.display='none'">
         <div class="gallery-overlay"><span>Standard Fink Truss</span></div>
       </div>
 
@@ -401,5 +250,13 @@
 
   <script src="js/main.js"></script>
   <script src="js/chatbot.js"></script>
+  <script>
+    // When a real image loads, remove the placeholder styling
+    document.querySelectorAll('.gallery-item img').forEach(img => {
+      img.addEventListener('load', () => {
+        img.closest('.gallery-item').classList.remove('placeholder');
+      });
+    });
+  </script>
 </body>
 </html>
