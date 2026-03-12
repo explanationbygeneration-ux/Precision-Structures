@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources & AI Tools | Precision Structures Inc.</title>
+  <meta name="description" content="Truss resources, AI chat assistant, instant estimate calculator, project planning guide, and terminology from Precision Structures Inc.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============ TOP BAR ============ -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span>Hooper, Utah &mdash; Serving the Rocky Mountain Region</span>
+    </div>
+    <div class="top-bar-right">
+      <a href="tel:8019853000">(801) 985-3000</a>
+      <span class="top-bar-hours">Mon &ndash; Fri &nbsp; 8 am &ndash; 4 pm</span>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="Logo.PNG" alt="Precision Structures Inc." class="nav-logo-icon">
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="resources.html" class="active">Resources</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta">Get a Bid</a>
+    <button class="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ============ MOBILE NAV ============ -->
+  <div class="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="resources.html" class="active">Resources</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- ============ PAGE HEADER ============ -->
+  <section class="page-header">
+    <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Resources</div>
+    <div class="section-label">Learn &amp; Estimate</div>
+    <h1 class="section-title">Resources &amp; AI Tools</h1>
+    <p class="section-subtitle">Everything you need to understand trusses and plan your project.</p>
+  </section>
+
+  <!-- ============ AI TOOLS ============ -->
+  <section class="ai-tools reveal">
+    <div class="section-label">AI-Powered</div>
+    <h2 class="section-title">Smart Tools for Your Project</h2>
+    <div class="ai-tools-grid" style="grid-template-columns: repeat(3, 1fr);">
+
+      <!-- AI Chat Assistant -->
+      <div class="ai-tool-card">
+        <div class="ai-tool-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="#C8922A" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+        </div>
+        <h3>AI Chat Assistant</h3>
+        <p>Get instant answers about our services, truss terminology, pricing guidance, and the bid process. Our Claude-powered assistant is available 24/7.</p>
+        <div class="ai-badge">Powered by Claude AI</div>
+        <div style="margin-top: 1.5rem;">
+          <button onclick="document.getElementById('chatbot-toggle').click()" class="btn-blue" style="border:none;cursor:pointer;">Start Chatting</button>
+        </div>
+      </div>
+
+      <!-- Instant Estimate Calculator -->
+      <div class="ai-tool-card">
+        <div class="ai-tool-icon">
+          <span style="font-size:1.6rem;">&#128425;</span>
+        </div>
+        <h3>Instant Estimate Calculator</h3>
+        <p>Get a rough ballpark estimate for your truss project in seconds. Enter your specifications below for an approximate price range.</p>
+        <div class="ai-badge">AI-Powered Estimates</div>
+        <div style="margin-top: 1.5rem;">
+          <a href="#estimate" class="btn-blue">Calculate Estimate</a>
+        </div>
+      </div>
+
+      <!-- Project Planner -->
+      <div class="ai-tool-card">
+        <div class="ai-tool-icon">
+          <span style="font-size:1.6rem;">&#128203;</span>
+        </div>
+        <h3>Project Planning Guide</h3>
+        <p>Not sure what information you need for a bid? Our guide walks you through everything to include when requesting a quote.</p>
+        <div class="ai-badge">Interactive Guide</div>
+        <div style="margin-top: 1.5rem;">
+          <a href="#planning-guide" class="btn-outline">View Guide</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ ESTIMATE CALCULATOR ============ -->
+  <section class="estimate-section reveal" id="estimate">
+    <div class="section-label">Quick Estimate</div>
+    <h2 class="section-title">Truss Cost Calculator</h2>
+    <p class="section-subtitle">Get a rough estimate for budgeting purposes. For accurate pricing, contact us with your plans.</p>
+
+    <div class="estimate-form-wrap">
+      <!-- Truss Type -->
+      <div class="f-group" style="margin-bottom:1.2rem;">
+        <label class="f-label" for="est-type">Truss Type</label>
+        <select id="est-type" class="f-select">
+          <option value="roof">Roof Truss</option>
+          <option value="floor">Floor Truss</option>
+        </select>
+      </div>
+
+      <!-- Span + Pitch -->
+      <div class="form-row" style="margin-bottom:1.2rem;">
+        <div class="f-group">
+          <label class="f-label" for="est-span">Span (feet)</label>
+          <input type="number" id="est-span" class="f-input" min="8" max="100" placeholder="e.g. 32">
+        </div>
+        <div class="f-group">
+          <label class="f-label" for="est-pitch">Pitch</label>
+          <select id="est-pitch" class="f-select">
+            <option value="2/12">2/12</option>
+            <option value="3/12">3/12</option>
+            <option value="4/12" selected>4/12</option>
+            <option value="5/12">5/12</option>
+            <option value="6/12">6/12</option>
+            <option value="7/12">7/12</option>
+            <option value="8/12">8/12</option>
+            <option value="9/12">9/12</option>
+            <option value="10/12">10/12</option>
+            <option value="12/12">12/12</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="f-group" style="margin-bottom:1.5rem;">
+        <label class="f-label" for="est-qty">Quantity</label>
+        <input type="number" id="est-qty" class="f-input" min="1" placeholder="e.g. 24">
+      </div>
+
+      <!-- Calculate Button -->
+      <button onclick="calculateEstimate()" class="btn-blue" style="border:none;cursor:pointer;width:100%;text-align:center;">Calculate Estimate</button>
+
+      <!-- Result -->
+      <div id="estimate-result" class="estimate-result">
+        <div class="est-label">Estimated Range</div>
+        <div class="est-value"></div>
+        <div class="est-note"></div>
+      </div>
+
+      <!-- Disclaimer -->
+      <p style="font-size:0.78rem;color:var(--mid);line-height:1.6;margin-top:1.5rem;">
+        This is a rough estimate only. Actual pricing depends on engineering, materials, delivery, and project specifics. Contact us for an accurate bid.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ PROJECT PLANNING GUIDE ============ -->
+  <section id="planning-guide" style="padding:80px 8vw;background:var(--cream);" class="reveal">
+    <div class="section-label">Be Prepared</div>
+    <h2 class="section-title">What to Include in Your Bid Request</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;">
+
+      <!-- Building Dimensions -->
+      <div style="background:var(--white);border-left:4px solid var(--blue);padding:2rem;">
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem;">Building Dimensions</h3>
+        <p style="font-family:'Barlow',sans-serif;font-size:0.95rem;color:var(--mid);line-height:1.7;">Describe overall building width, length, and wall height. These measurements help us size your trusses correctly and plan for bearing conditions.</p>
+      </div>
+
+      <!-- Truss Specifications -->
+      <div style="background:var(--white);border-left:4px solid var(--blue);padding:2rem;">
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem;">Truss Specifications</h3>
+        <p style="font-family:'Barlow',sans-serif;font-size:0.95rem;color:var(--mid);line-height:1.7;">Span, pitch, overhang, spacing (typically 24" OC), and heel height. If you have engineered drawings, include those as well.</p>
+      </div>
+
+      <!-- Load Requirements -->
+      <div style="background:var(--white);border-left:4px solid var(--blue);padding:2rem;">
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem;">Load Requirements</h3>
+        <p style="font-family:'Barlow',sans-serif;font-size:0.95rem;color:var(--mid);line-height:1.7;">Snow load zone, special wind ratings, any concentrated loads (HVAC units, solar panels, etc.). Local building codes determine minimum loads.</p>
+      </div>
+
+      <!-- Project Timeline -->
+      <div style="background:var(--white);border-left:4px solid var(--blue);padding:2rem;">
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem;">Project Timeline</h3>
+        <p style="font-family:'Barlow',sans-serif;font-size:0.95rem;color:var(--mid);line-height:1.7;">When you need trusses delivered, project start date, any phasing requirements. Early planning ensures we can meet your schedule.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TERMINOLOGY ============ -->
+  <section class="terminology reveal" id="terminology">
+    <div class="section-label">Know Your Trusses</div>
+    <h2 class="section-title">Truss Terminology</h2>
+
+    <div class="term-layout">
+      <!-- Left: Term List -->
+      <ul class="term-list">
+        <li class="term-row">
+          <span class="term-name">Top Chord</span>
+          <span class="term-def">The inclined (or horizontal) upper member of the truss, carrying compressive forces and bending loads from the roof deck down to the bearing points.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Bottom Chord</span>
+          <span class="term-def">The lower horizontal member that ties the truss together, primarily resisting tension forces and supporting ceiling loads.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Web Members</span>
+          <span class="term-def">Interior diagonal and vertical members that form the triangulated pattern, transferring loads between the top and bottom chords.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">King Post</span>
+          <span class="term-def">The central vertical web member that connects the apex of the top chord to the midpoint of the bottom chord.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Bearing</span>
+          <span class="term-def">The point where the truss rests on the wall or support structure. Loads transfer through these contact points to the building frame.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Heel</span>
+          <span class="term-def">The junction where the top chord meets the bottom chord at the bearing point. Heel height affects insulation depth at the eave.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Span</span>
+          <span class="term-def">The horizontal distance between the outside edges of the two bearing points &mdash; effectively the width the truss covers.</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Pitch</span>
+          <span class="term-def">The slope of the roof expressed as rise over run (e.g., 4/12 means 4 inches of rise for every 12 inches of horizontal run).</span>
+        </li>
+        <li class="term-row">
+          <span class="term-name">Connector Plate</span>
+          <span class="term-def">Galvanized steel plates with pre-punched teeth that are pressed into wood at each joint, holding truss members together.</span>
+        </li>
+      </ul>
+
+      <!-- Right: Truss Anatomy SVG Diagram -->
+      <div class="diagram-box">
+        <h4>Truss Anatomy</h4>
+        <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <!-- Background grid -->
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(27,79,160,0.07)" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="500" height="300" fill="url(#grid)"/>
+
+          <!-- Bottom Chord -->
+          <line x1="60" y1="230" x2="440" y2="230" stroke="#1B4FA0" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- Top Chord Left -->
+          <line x1="60" y1="230" x2="250" y2="60" stroke="#1B4FA0" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- Top Chord Right -->
+          <line x1="250" y1="60" x2="440" y2="230" stroke="#1B4FA0" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- King Post (center vertical) -->
+          <line x1="250" y1="60" x2="250" y2="230" stroke="#C8922A" stroke-width="3" stroke-linecap="round"/>
+
+          <!-- Web Members -->
+          <line x1="155" y1="145" x2="155" y2="230" stroke="#C8922A" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="345" y1="145" x2="345" y2="230" stroke="#C8922A" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="155" y1="230" x2="250" y2="145" stroke="#C8922A" stroke-width="2" stroke-dasharray="6,3"/>
+          <line x1="345" y1="230" x2="250" y2="145" stroke="#C8922A" stroke-width="2" stroke-dasharray="6,3"/>
+
+          <!-- Connector Plates (joints) -->
+          <rect x="244" y="54" width="12" height="12" fill="#C8922A" opacity="0.8"/>
+          <rect x="244" y="224" width="12" height="12" fill="#C8922A" opacity="0.8"/>
+          <rect x="54" y="224" width="12" height="12" fill="#C8922A" opacity="0.8"/>
+          <rect x="434" y="224" width="12" height="12" fill="#C8922A" opacity="0.8"/>
+          <rect x="149" y="139" width="12" height="12" fill="#C8922A" opacity="0.6"/>
+          <rect x="339" y="139" width="12" height="12" fill="#C8922A" opacity="0.6"/>
+
+          <!-- Bearing triangles -->
+          <polygon points="60,234 50,254 70,254" fill="#1B4FA0" opacity="0.6"/>
+          <polygon points="440,234 430,254 450,254" fill="#1B4FA0" opacity="0.6"/>
+
+          <!-- Labels -->
+          <text x="140" y="120" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="600" fill="#1B4FA0" text-anchor="end" transform="rotate(-35 140 120)">TOP CHORD</text>
+          <text x="250" y="270" font-family="Barlow Condensed, sans-serif" font-size="11" font-weight="600" fill="#1B4FA0" text-anchor="middle">BOTTOM CHORD</text>
+          <text x="265" y="155" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="600" fill="#C8922A" text-anchor="start">KING POST</text>
+          <text x="120" y="200" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="600" fill="#C8922A" text-anchor="end">WEB</text>
+          <text x="380" y="200" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="600" fill="#C8922A" text-anchor="start">WEB</text>
+          <text x="250" y="46" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="700" fill="#C8922A" text-anchor="middle">PEAK / APEX</text>
+          <text x="40" y="270" font-family="Barlow Condensed, sans-serif" font-size="9" font-weight="600" fill="#1B4FA0" text-anchor="start">BEARING</text>
+          <text x="460" y="270" font-family="Barlow Condensed, sans-serif" font-size="9" font-weight="600" fill="#1B4FA0" text-anchor="end">BEARING</text>
+          <text x="67" y="216" font-family="Barlow Condensed, sans-serif" font-size="9" font-weight="600" fill="#5a6372" text-anchor="start">HEEL</text>
+          <text x="433" y="216" font-family="Barlow Condensed, sans-serif" font-size="9" font-weight="600" fill="#5a6372" text-anchor="end">HEEL</text>
+
+          <!-- Span dimension line -->
+          <line x1="60" y1="288" x2="440" y2="288" stroke="#5a6372" stroke-width="1"/>
+          <line x1="60" y1="283" x2="60" y2="293" stroke="#5a6372" stroke-width="1"/>
+          <line x1="440" y1="283" x2="440" y2="293" stroke="#5a6372" stroke-width="1"/>
+          <text x="250" y="296" font-family="Barlow Condensed, sans-serif" font-size="10" font-weight="700" fill="#5a6372" text-anchor="middle">SPAN</text>
+
+          <!-- Connector Plate label -->
+          <line x1="60" y1="224" x2="30" y2="200" stroke="#5a6372" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="28" y="196" font-family="Barlow Condensed, sans-serif" font-size="8" font-weight="600" fill="#5a6372" text-anchor="end">CONNECTOR PLATE</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMMON TRUSS TYPES ============ -->
+  <section style="padding:80px 8vw;background:var(--white);" class="reveal">
+    <div class="section-label">Truss Profiles</div>
+    <h2 class="section-title">Common Truss Types</h2>
+    <p class="section-subtitle">Each truss type is designed for specific structural and architectural needs.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:2rem;">
+
+      <!-- Fink Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <line x1="10" y1="80" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="10" y1="80" x2="100" y2="20" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="100" y1="20" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- W-pattern webs -->
+          <line x1="55" y1="50" x2="70" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="70" y1="80" x2="100" y2="50" stroke="#C8922A" stroke-width="2"/>
+          <line x1="100" y1="50" x2="130" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="130" y1="80" x2="145" y2="50" stroke="#C8922A" stroke-width="2"/>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Fink Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">The most common residential truss. W-shaped web pattern provides excellent load distribution.</p>
+      </div>
+
+      <!-- Howe Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <line x1="10" y1="80" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="10" y1="80" x2="100" y2="20" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="100" y1="20" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Verticals -->
+          <line x1="55" y1="50" x2="55" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="100" y1="20" x2="100" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="145" y1="50" x2="145" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <!-- Diagonals -->
+          <line x1="10" y1="80" x2="55" y2="50" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="55" y1="80" x2="100" y2="20" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="100" y1="80" x2="145" y2="50" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="145" y1="80" x2="190" y2="80" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Howe Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">Vertical webs in compression, diagonal webs in tension. Good for moderate spans.</p>
+      </div>
+
+      <!-- Pratt Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <line x1="10" y1="80" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="10" y1="80" x2="100" y2="20" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="100" y1="20" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Verticals -->
+          <line x1="55" y1="50" x2="55" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="100" y1="20" x2="100" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="145" y1="50" x2="145" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <!-- Diagonals (opposite direction from Howe) -->
+          <line x1="55" y1="50" x2="10" y2="80" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="100" y1="20" x2="55" y2="80" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="145" y1="50" x2="100" y2="80" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <line x1="190" y1="80" x2="145" y2="80" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Pratt Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">Opposite of Howe &mdash; diagonal webs in compression. Used in longer spans.</p>
+      </div>
+
+      <!-- Scissor Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <!-- Top chord -->
+          <line x1="10" y1="80" x2="100" y2="15" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="100" y1="15" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Bottom chord (scissored / vaulted) -->
+          <line x1="10" y1="80" x2="100" y2="45" stroke="#1B4FA0" stroke-width="2.5"/>
+          <line x1="100" y1="45" x2="190" y2="80" stroke="#1B4FA0" stroke-width="2.5"/>
+          <!-- King post -->
+          <line x1="100" y1="15" x2="100" y2="45" stroke="#C8922A" stroke-width="2"/>
+          <!-- Webs -->
+          <line x1="55" y1="47.5" x2="55" y2="62.5" stroke="#C8922A" stroke-width="1.5"/>
+          <line x1="145" y1="47.5" x2="145" y2="62.5" stroke="#C8922A" stroke-width="1.5"/>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Scissor Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">Creates a vaulted ceiling effect. Bottom chord slopes upward toward the center.</p>
+      </div>
+
+      <!-- Attic Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <!-- Bottom chord -->
+          <line x1="10" y1="85" x2="190" y2="85" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Top chord -->
+          <line x1="10" y1="85" x2="100" y2="15" stroke="#1B4FA0" stroke-width="3"/>
+          <line x1="100" y1="15" x2="190" y2="85" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Room box inside -->
+          <rect x="55" y="45" width="90" height="40" fill="none" stroke="#C8922A" stroke-width="2.5"/>
+          <!-- Verticals to room -->
+          <line x1="55" y1="45" x2="55" y2="85" stroke="#C8922A" stroke-width="2"/>
+          <line x1="145" y1="45" x2="145" y2="85" stroke="#C8922A" stroke-width="2"/>
+          <!-- Room label -->
+          <text x="100" y="70" font-family="Barlow Condensed, sans-serif" font-size="9" font-weight="600" fill="#C8922A" text-anchor="middle">ROOM</text>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Attic Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">Designed with a usable room space within the truss. Great for bonus rooms.</p>
+      </div>
+
+      <!-- Mono Truss -->
+      <div style="background:var(--cream);border:2px solid var(--border);padding:2rem;transition:transform 0.25s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;margin-bottom:1rem;">
+          <!-- Bottom chord -->
+          <line x1="10" y1="80" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Top chord (single slope) -->
+          <line x1="10" y1="80" x2="190" y2="30" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Vertical right -->
+          <line x1="190" y1="30" x2="190" y2="80" stroke="#1B4FA0" stroke-width="3"/>
+          <!-- Webs -->
+          <line x1="70" y1="64" x2="70" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="130" y1="47" x2="130" y2="80" stroke="#C8922A" stroke-width="2"/>
+          <line x1="70" y1="80" x2="130" y2="47" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="4,2"/>
+        </svg>
+        <h3 style="font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:0.5rem;">Mono Truss</h3>
+        <p style="font-size:0.9rem;color:var(--mid);line-height:1.7;">Single slope, like half a triangle. Used for additions, porches, and shed roofs.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="quote-section reveal">
+    <span class="quote-marks">&ldquo;</span>
+    <h2 class="quote-text" style="font-style:normal;font-weight:700;font-family:'Oswald',sans-serif;text-transform:uppercase;">Ready to Start?</h2>
+    <p style="font-size:1.05rem;color:rgba(255,255,255,0.8);max-width:500px;margin:0 auto 2rem;line-height:1.7;">
+      Send us your plans for a free bid, or give us a call to discuss your project.
+    </p>
+    <a href="contact.html" class="btn-blue" style="background:var(--white);color:var(--blue);">Contact Us Today</a>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">Precision <span>Structures</span></div>
+        <p class="footer-tagline">Family-owned truss manufacturing since 1990. Building the backbone of your structure with precision and care.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Navigation</div>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <ul>
+          <li><a href="services.html">Roof Trusses</a></li>
+          <li><a href="services.html">Floor Trusses</a></li>
+          <li><a href="services.html">Custom Design</a></li>
+          <li><a href="resources.html#estimate">Estimate Calculator</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <ul>
+          <li><a href="tel:8019853000">(801) 985-3000</a></li>
+          <li><a href="mailto:bids@precisionstructures.net">bids@precisionstructures.net</a></li>
+          <li><a href="mailto:contact@precisionstructures.net">contact@precisionstructures.net</a></li>
+          <li><a href="#">5333 S. 5500 W., Hooper, UT 84315</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 Precision Structures Inc. All rights reserved.</span>
+      <a href="tel:8019853000" class="footer-phone">(801) 985-3000</a>
+    </div>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script src="js/main.js"></script>
+  <script src="js/chatbot.js"></script>
+
+</body>
+</html>
