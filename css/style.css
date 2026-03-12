@@ -395,10 +395,23 @@ footer { background: var(--blue-dark); padding: 50px 8vw 30px; }
 .gallery-item img {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
+/* Always-visible title bar at bottom of each gallery card */
+.gallery-item .gallery-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(20,59,122,0.92));
+  padding: 2.5rem 1rem 0.8rem;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.gallery-label span {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--white);
+  text-align: center;
+}
+/* Hover overlay — "View Gallery" prompt */
 .gallery-item .gallery-overlay {
-  position: absolute; inset: 0; background: rgba(27,79,160,0.85);
+  position: absolute; inset: 0; background: rgba(27,79,160,0.8);
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 0.3rem;
+  flex-direction: column; gap: 0.6rem;
   opacity: 0; transition: opacity 0.3s;
 }
 .gallery-item:hover .gallery-overlay { opacity: 1; }
@@ -406,9 +419,14 @@ footer { background: var(--blue-dark); padding: 50px 8vw 30px; }
   font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700;
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--white);
 }
-.gallery-overlay .gallery-caption {
-  font-family: 'Barlow', sans-serif; font-size: 0.78rem; font-weight: 400;
-  letter-spacing: 0; text-transform: none; color: rgba(255,255,255,0.7);
+.gallery-overlay .gallery-view-btn {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
+  border: 1.5px solid var(--gold); padding: 0.4rem 1.2rem;
+  background: transparent; cursor: pointer; transition: all 0.2s;
+}
+.gallery-overlay .gallery-view-btn:hover {
+  background: var(--gold); color: var(--white);
 }
 /* Placeholder style for gallery items without a real photo */
 .gallery-item.placeholder {
@@ -431,6 +449,52 @@ footer { background: var(--blue-dark); padding: 50px 8vw 30px; }
 }
 .gallery-cat-btn:hover, .gallery-cat-btn.active {
   background: var(--blue); color: var(--white); border-color: var(--blue);
+}
+
+/* --- LIGHTBOX --- */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 2000;
+  background: rgba(10, 18, 36, 0.95); align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lightbox-inner {
+  position: relative; width: 90vw; max-width: 1000px; max-height: 85vh;
+  display: flex; flex-direction: column; align-items: center;
+}
+.lightbox-img {
+  max-width: 100%; max-height: 70vh; object-fit: contain; display: block;
+  border: 3px solid var(--gold);
+}
+.lightbox-caption {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--white);
+  margin-top: 1.2rem; text-align: center;
+}
+.lightbox-counter {
+  font-family: 'Barlow', sans-serif; font-size: 0.8rem;
+  color: rgba(255,255,255,0.45); margin-top: 0.4rem;
+}
+.lightbox-close {
+  position: absolute; top: -2.5rem; right: 0;
+  background: none; border: none; color: var(--white); font-size: 2rem;
+  cursor: pointer; padding: 0.5rem; line-height: 1; opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.lightbox-close:hover { opacity: 1; }
+.lightbox-prev, .lightbox-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: var(--blue); border: 2px solid var(--gold); color: var(--white);
+  width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; cursor: pointer; transition: background 0.2s;
+}
+.lightbox-prev:hover, .lightbox-next:hover { background: var(--gold); }
+.lightbox-prev { left: -70px; }
+.lightbox-next { right: -70px; }
+@media (max-width: 900px) {
+  .lightbox-prev { left: 0.5rem; }
+  .lightbox-next { right: 0.5rem; }
+  .lightbox-close { top: 0.5rem; right: 0.5rem; }
+  .lightbox-inner { width: 95vw; }
 }
 
 /* --- TIMELINE --- */
