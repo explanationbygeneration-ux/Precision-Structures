@@ -26,12 +26,10 @@ jobs:
           action: "upload"
           # App source code path — root of the repo
           app_location: "/"
-          # API source code path — Azure Functions (when ready)
-          api_location: "api"
+          # API source code path — uncomment when Azure Functions are added
+          # api_location: "api"
           # No build output directory — we serve static files directly
           output_location: ""
-          # Skip API build if api/ is empty or has no package.json
-          skip_api_build: true
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
