@@ -28,7 +28,7 @@ jobs:
           # api_location: "api"  # uncomment when Azure Functions are added
           output_location: ""
           production_branch: "master"
-          deployment_environment: ${{ github.ref == 'refs/heads/master' && 'production' || 'develop' }}
+          deployment_environment: ${{ github.ref != 'refs/heads/master' && 'develop' || '' }}
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
