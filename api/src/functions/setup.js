@@ -1,8 +1,27 @@
 const { app } = require('@azure/functions');
 const { getCollection, saveCollection, generateId } = require('../shared/db');
-const { hashPassword } = require('../shared/auth');
+const { hashPassword, generateToken } = require('../shared/auth');
 
-// POST /api/setup
+// GET /api/setup — check if setup is needed
+app.http('setup-check', {
+    methods: ['GET'],
+    authLevel: 'anonymous',
+    route: 'setup',
+    handler: async (request, context) => {
+        try {
+            const users = getCollection('users');
+            return {
+                status: 200,
+                jsonBody: { needsSetup: users.length === 0 }
+            };
+        } catch (err) {
+            context.error('Setup check error:', err);
+            return { status: 200, jsonBody: { needsSetup: true } };
+        }
+    }
+});
+
+// POST /api/setup — create first admin
 app.http('setup', {
     methods: ['POST'],
     authLevel: 'anonymous',
@@ -50,10 +69,13 @@ app.http('setup', {
             users.push(adminUser);
             saveCollection('users', users);
 
+            const token = generateToken(adminUser);
+
             return {
                 status: 201,
                 jsonBody: {
                     message: 'Admin user created successfully',
+                    token: token,
                     user: {
                         id: adminUser.id,
                         email: adminUser.email,

@@ -111,9 +111,10 @@
                     }
                 }
             } catch (e) {
-                // API not available — show login form by default
-                loginCard.hidden = false;
-                setupCard.hidden = true;
+                // API not available — show setup form as fallback
+                // (if the API isn't responding, setup likely hasn't happened)
+                loginCard.hidden = true;
+                setupCard.hidden = false;
             }
         }
 
