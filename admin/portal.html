@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBYG Automation — Content Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="portal-page">
+
+    <!-- Loading overlay -->
+    <div id="app-loader" class="app-loader">
+        <div class="spinner-lg"></div>
+        <p>Loading portal&hellip;</p>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal overlay -->
+    <div id="modal-overlay" class="modal-overlay" hidden>
+        <div class="modal" id="modal-dialog">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button class="modal-close" id="modal-close-btn" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel-btn">Cancel</button>
+                <button class="btn btn-primary" id="modal-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+            <div class="header-brand">
+                <span class="logo-ebyg">EBYG</span> <span class="logo-automation">Automation</span>
+            </div>
+        </div>
+        <div class="header-center">
+            <h1 class="header-title">Content Portal</h1>
+        </div>
+        <div class="header-right">
+            <div class="header-user">
+                <span class="user-name" id="header-user-name"></span>
+                <span class="badge badge-role" id="header-user-role"></span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <!-- Layout wrapper -->
+    <div class="portal-layout">
+
+        <!-- Sidebar -->
+        <aside class="portal-sidebar" id="portal-sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li>
+                        <a href="#" class="nav-item active" data-view="dashboard">
+                            <span class="nav-icon">&#9632;</span>
+                            <span class="nav-label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-section-title">Content Sections</li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="content-hero">
+                            <span class="nav-icon">&#9733;</span>
+                            <span class="nav-label">Hero</span>
+                            <span class="nav-page-hint">index.html</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="content-about">
+                            <span class="nav-icon">&#8505;</span>
+                            <span class="nav-label">About</span>
+                            <span class="nav-page-hint">about.html</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="content-services">
+                            <span class="nav-icon">&#9881;</span>
+                            <span class="nav-label">Services</span>
+                            <span class="nav-page-hint">services.html</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="content-gallery">
+                            <span class="nav-icon">&#9634;</span>
+                            <span class="nav-label">Gallery</span>
+                            <span class="nav-page-hint">gallery.html</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="content-contact">
+                            <span class="nav-icon">&#9993;</span>
+                            <span class="nav-label">Contact Info</span>
+                            <span class="nav-page-hint">contact.html</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li class="admin-only">
+                        <a href="#" class="nav-item" data-view="review-queue">
+                            <span class="nav-icon">&#10003;</span>
+                            <span class="nav-label">Review Queue</span>
+                            <span class="badge badge-count" id="review-count-badge" hidden>0</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-view="media-library">
+                            <span class="nav-icon">&#128444;</span>
+                            <span class="nav-label">Media Library</span>
+                        </a>
+                    </li>
+                    <li class="admin-only">
+                        <a href="#" class="nav-item" data-view="users">
+                            <span class="nav-icon">&#128100;</span>
+                            <span class="nav-label">Users</span>
+                        </a>
+                    </li>
+                    <li class="admin-only">
+                        <a href="#" class="nav-item" data-view="audit-log">
+                            <span class="nav-icon">&#128221;</span>
+                            <span class="nav-label">Audit Log</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="/" class="nav-item nav-external" target="_blank" rel="noopener">
+                            <span class="nav-icon">&#8599;</span>
+                            <span class="nav-label">View Staging Site</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" class="nav-item nav-external" target="_blank" rel="noopener">
+                            <span class="nav-icon">&#127760;</span>
+                            <span class="nav-label">View Production Site</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="portal-main" id="portal-main">
+
+            <!-- ============ DASHBOARD ============ -->
+            <section class="view" data-view="dashboard">
+                <div class="view-header">
+                    <h2>Dashboard</h2>
+                    <p class="view-subtitle">Overview of content management activity</p>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dash-card">
+                        <div class="dash-card-icon" style="background:var(--gold-light);color:var(--gold);">&#9203;</div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-value" id="dash-pending">0</span>
+                            <span class="dash-card-label">Pending Changes</span>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon" style="background:var(--blue-light);color:var(--blue);">&#10003;</div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-value" id="dash-published">0</span>
+                            <span class="dash-card-label">Published Today</span>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon" style="background:#e0e7ff;color:#4f46e5;">&#9634;</div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-value" id="dash-areas">5</span>
+                            <span class="dash-card-label">Content Areas</span>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon" style="background:#fce7f3;color:#db2777;">&#128100;</div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-value" id="dash-users">0</span>
+                            <span class="dash-card-label">Active Users</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-activity">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-list" id="activity-list">
+                        <p class="empty-state">No recent activity to display.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ HERO CONTENT ============ -->
+            <section class="view" data-view="content-hero" hidden>
+                <div class="view-header">
+                    <h2>Hero Section</h2>
+                    <p class="view-subtitle">Edit the hero banner on index.html</p>
+                </div>
+                <div class="content-editor-layout">
+                    <div class="editor-main">
+                        <div class="published-reference" id="hero-published-ref">
+                            <h4>Currently Published</h4>
+                            <div class="ref-content" id="hero-ref-content"><p class="empty-state">Loading&hellip;</p></div>
+                        </div>
+                        <form id="hero-form" class="editor-form" data-page="index" data-area="hero">
+                            <div class="form-group">
+                                <label for="hero-headline">Headline <span class="char-count"><span id="hero-headline-count">0</span>/100</span></label>
+                                <input type="text" id="hero-headline" name="headline" maxlength="100" placeholder="Main headline text" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-subheadline">Subheadline <span class="char-count"><span id="hero-subheadline-count">0</span>/200</span></label>
+                                <input type="text" id="hero-subheadline" name="subheadline" maxlength="200" placeholder="Supporting text under the headline">
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-cta-text">CTA Button Text <span class="char-count"><span id="hero-cta-text-count">0</span>/40</span></label>
+                                <input type="text" id="hero-cta-text" name="cta_text" maxlength="40" placeholder="e.g. Get a Quote">
+                            </div>
+                            <div class="form-group">
+                                <label for="hero-cta-link">CTA Link</label>
+                                <select id="hero-cta-link" name="cta_link">
+                                    <option value="index.html">Home (index.html)</option>
+                                    <option value="about.html">About (about.html)</option>
+                                    <option value="services.html">Services (services.html)</option>
+                                    <option value="gallery.html">Gallery (gallery.html)</option>
+                                    <option value="contact.html">Contact (contact.html)</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary save-draft-btn">Save Draft</button>
+                                <button type="button" class="btn btn-primary submit-review-btn">Submit for Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="editor-sidebar">
+                        <div class="version-history">
+                            <h4 class="version-history-toggle">Version History <span class="toggle-arrow">&#9660;</span></h4>
+                            <div class="version-list" id="hero-versions"><p class="empty-state">No versions yet.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ ABOUT CONTENT ============ -->
+            <section class="view" data-view="content-about" hidden>
+                <div class="view-header">
+                    <h2>About Section</h2>
+                    <p class="view-subtitle">Edit the about page content on about.html</p>
+                </div>
+                <div class="content-editor-layout">
+                    <div class="editor-main">
+                        <div class="published-reference" id="about-published-ref">
+                            <h4>Currently Published</h4>
+                            <div class="ref-content" id="about-ref-content"><p class="empty-state">Loading&hellip;</p></div>
+                        </div>
+                        <form id="about-form" class="editor-form" data-page="about" data-area="about">
+                            <div class="form-group">
+                                <label for="about-heading">Heading <span class="char-count"><span id="about-heading-count">0</span>/80</span></label>
+                                <input type="text" id="about-heading" name="heading" maxlength="80" placeholder="About section heading" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="about-body">Body Text <span class="char-count"><span id="about-body-count">0</span>/2000</span></label>
+                                <textarea id="about-body" name="body" maxlength="2000" rows="10" placeholder="About page main content"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="about-caption">Photo Caption <span class="char-count"><span id="about-caption-count">0</span>/120</span></label>
+                                <input type="text" id="about-caption" name="photo_caption" maxlength="120" placeholder="Caption for the about photo">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary save-draft-btn">Save Draft</button>
+                                <button type="button" class="btn btn-primary submit-review-btn">Submit for Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="editor-sidebar">
+                        <div class="version-history">
+                            <h4 class="version-history-toggle">Version History <span class="toggle-arrow">&#9660;</span></h4>
+                            <div class="version-list" id="about-versions"><p class="empty-state">No versions yet.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ SERVICES CONTENT ============ -->
+            <section class="view" data-view="content-services" hidden>
+                <div class="view-header">
+                    <h2>Services Section</h2>
+                    <p class="view-subtitle">Manage service items on services.html</p>
+                </div>
+                <div class="content-editor-layout">
+                    <div class="editor-main">
+                        <div class="published-reference" id="services-published-ref">
+                            <h4>Currently Published</h4>
+                            <div class="ref-content" id="services-ref-content"><p class="empty-state">Loading&hellip;</p></div>
+                        </div>
+                        <form id="services-form" class="editor-form" data-page="services" data-area="services">
+                            <div id="services-items" class="repeatable-items">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm add-item-btn" id="add-service-btn">+ Add Service</button>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary save-draft-btn">Save Draft</button>
+                                <button type="button" class="btn btn-primary submit-review-btn">Submit for Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="editor-sidebar">
+                        <div class="version-history">
+                            <h4 class="version-history-toggle">Version History <span class="toggle-arrow">&#9660;</span></h4>
+                            <div class="version-list" id="services-versions"><p class="empty-state">No versions yet.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ GALLERY CONTENT ============ -->
+            <section class="view" data-view="content-gallery" hidden>
+                <div class="view-header">
+                    <h2>Gallery Section</h2>
+                    <p class="view-subtitle">Manage gallery items on gallery.html</p>
+                </div>
+                <div class="content-editor-layout">
+                    <div class="editor-main">
+                        <div class="published-reference" id="gallery-published-ref">
+                            <h4>Currently Published</h4>
+                            <div class="ref-content" id="gallery-ref-content"><p class="empty-state">Loading&hellip;</p></div>
+                        </div>
+                        <form id="gallery-form" class="editor-form" data-page="gallery" data-area="gallery">
+                            <div id="gallery-items" class="repeatable-items">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm add-item-btn" id="add-gallery-btn">+ Add Gallery Item</button>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary save-draft-btn">Save Draft</button>
+                                <button type="button" class="btn btn-primary submit-review-btn">Submit for Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="editor-sidebar">
+                        <div class="version-history">
+                            <h4 class="version-history-toggle">Version History <span class="toggle-arrow">&#9660;</span></h4>
+                            <div class="version-list" id="gallery-versions"><p class="empty-state">No versions yet.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ CONTACT CONTENT ============ -->
+            <section class="view" data-view="content-contact" hidden>
+                <div class="view-header">
+                    <h2>Contact Information</h2>
+                    <p class="view-subtitle">Edit contact details on contact.html</p>
+                </div>
+                <div class="content-editor-layout">
+                    <div class="editor-main">
+                        <div class="published-reference" id="contact-published-ref">
+                            <h4>Currently Published</h4>
+                            <div class="ref-content" id="contact-ref-content"><p class="empty-state">Loading&hellip;</p></div>
+                        </div>
+                        <form id="contact-form" class="editor-form" data-page="contact" data-area="contact">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contact-phone">Phone</label>
+                                    <input type="tel" id="contact-phone" name="phone" placeholder="(801) 985-3000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-hours">Hours</label>
+                                    <input type="text" id="contact-hours" name="hours" placeholder="Mon-Fri 8am-4pm">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contact-bids-email">Bids Email</label>
+                                    <input type="email" id="contact-bids-email" name="bids_email" placeholder="bids@precisionstructures.net">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-general-email">General Email</label>
+                                    <input type="email" id="contact-general-email" name="general_email" placeholder="contact@precisionstructures.net">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-address">Street Address</label>
+                                <input type="text" id="contact-address" name="address" placeholder="5333 S. 5500 W.">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-city-state-zip">City, State, ZIP</label>
+                                <input type="text" id="contact-city-state-zip" name="city_state_zip" placeholder="Hooper, UT 84315">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contact-facebook">Facebook URL</label>
+                                    <input type="url" id="contact-facebook" name="facebook_url" placeholder="https://facebook.com/...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-instagram">Instagram URL</label>
+                                    <input type="url" id="contact-instagram" name="instagram_url" placeholder="https://instagram.com/...">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary save-draft-btn">Save Draft</button>
+                                <button type="button" class="btn btn-primary submit-review-btn">Submit for Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="editor-sidebar">
+                        <div class="version-history">
+                            <h4 class="version-history-toggle">Version History <span class="toggle-arrow">&#9660;</span></h4>
+                            <div class="version-list" id="contact-versions"><p class="empty-state">No versions yet.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ REVIEW QUEUE ============ -->
+            <section class="view admin-only" data-view="review-queue" hidden>
+                <div class="view-header">
+                    <h2>Review Queue</h2>
+                    <p class="view-subtitle">Approve or reject submitted content changes</p>
+                </div>
+                <div class="review-filters">
+                    <select id="review-filter-status" class="input-sm">
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="">All</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="review-refresh-btn">Refresh</button>
+                </div>
+                <div class="review-list" id="review-list">
+                    <p class="empty-state">No pending reviews.</p>
+                </div>
+            </section>
+
+            <!-- ============ MEDIA LIBRARY ============ -->
+            <section class="view" data-view="media-library" hidden>
+                <div class="view-header">
+                    <h2>Media Library</h2>
+                    <p class="view-subtitle">Upload and manage images and files</p>
+                </div>
+                <div class="media-toolbar">
+                    <button class="btn btn-primary btn-sm" id="media-upload-btn">Upload File</button>
+                    <input type="file" id="media-file-input" hidden accept="image/*,.pdf,.svg">
+                </div>
+                <div class="media-grid" id="media-grid">
+                    <p class="empty-state">No media files uploaded yet.</p>
+                </div>
+            </section>
+
+            <!-- ============ USERS ============ -->
+            <section class="view admin-only" data-view="users" hidden>
+                <div class="view-header">
+                    <h2>User Management</h2>
+                    <p class="view-subtitle">Manage portal users and their roles</p>
+                </div>
+                <div class="users-toolbar">
+                    <button class="btn btn-primary btn-sm" id="create-user-btn">+ Create User</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <tr><td colspan="6" class="empty-state">Loading users&hellip;</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============ AUDIT LOG ============ -->
+            <section class="view admin-only" data-view="audit-log" hidden>
+                <div class="view-header">
+                    <h2>Audit Log</h2>
+                    <p class="view-subtitle">Track all portal activity</p>
+                </div>
+                <div class="audit-filters">
+                    <input type="text" id="audit-search" class="input-sm" placeholder="Search actions&hellip;">
+                    <select id="audit-filter-action" class="input-sm">
+                        <option value="">All Actions</option>
+                        <option value="login">Login</option>
+                        <option value="content.save">Content Save</option>
+                        <option value="content.submit">Content Submit</option>
+                        <option value="content.approve">Content Approve</option>
+                        <option value="content.reject">Content Reject</option>
+                        <option value="user.create">User Create</option>
+                        <option value="user.update">User Update</option>
+                        <option value="user.deactivate">User Deactivate</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="audit-refresh-btn">Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Target</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-tbody">
+                            <tr><td colspan="5" class="empty-state">Loading audit log&hellip;</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="audit-pagination">
+                    <button class="btn btn-secondary btn-sm" id="audit-prev-btn" disabled>Previous</button>
+                    <span class="pagination-info" id="audit-page-info">Page 1</span>
+                    <button class="btn btn-secondary btn-sm" id="audit-next-btn">Next</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

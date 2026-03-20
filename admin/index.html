@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBYG Automation — Content Portal Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="login-page">
+
+    <!-- Login Form -->
+    <div id="login-card" class="login-card">
+        <div class="login-logo">
+            <span class="logo-ebyg">EBYG</span> <span class="logo-automation">Automation</span>
+        </div>
+        <p class="login-subtitle">Content Portal</p>
+
+        <form id="login-form" class="login-form" autocomplete="on">
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+            <div id="login-error" class="login-error" hidden></div>
+            <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+                <span class="btn-text">Sign In</span>
+                <span class="btn-spinner" hidden></span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            Precision Structures Inc. &mdash; Managed by EBYG Automation
+        </div>
+    </div>
+
+    <!-- First-Time Setup Form -->
+    <div id="setup-card" class="login-card" hidden>
+        <div class="login-logo">
+            <span class="logo-ebyg">EBYG</span> <span class="logo-automation">Automation</span>
+        </div>
+        <p class="login-subtitle">First-Time Setup</p>
+        <p class="setup-description">No admin account exists yet. Create the first administrator to get started.</p>
+
+        <form id="setup-form" class="login-form" autocomplete="off">
+            <div class="form-group">
+                <label for="setup-name">Full Name</label>
+                <input type="text" id="setup-name" name="name" placeholder="Your full name" required minlength="2" maxlength="100">
+            </div>
+            <div class="form-group">
+                <label for="setup-email">Email</label>
+                <input type="email" id="setup-email" name="email" placeholder="admin@example.com" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="setup-password">Password</label>
+                <input type="password" id="setup-password" name="password" placeholder="Minimum 8 characters" required minlength="8" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="setup-confirm">Confirm Password</label>
+                <input type="password" id="setup-confirm" name="confirm" placeholder="Re-enter password" required minlength="8" autocomplete="new-password">
+            </div>
+            <div id="setup-error" class="login-error" hidden></div>
+            <button type="submit" class="btn btn-primary btn-block" id="setup-btn">
+                <span class="btn-text">Create Admin Account</span>
+                <span class="btn-spinner" hidden></span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            Precision Structures Inc. &mdash; Managed by EBYG Automation
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+    (function () {
+        const loginCard = document.getElementById('login-card');
+        const setupCard = document.getElementById('setup-card');
+        const loginForm = document.getElementById('login-form');
+        const setupForm = document.getElementById('setup-form');
+        const loginError = document.getElementById('login-error');
+        const setupError = document.getElementById('setup-error');
+        const loginBtn = document.getElementById('login-btn');
+        const setupBtn = document.getElementById('setup-btn');
+
+        // If already logged in, go straight to portal
+        if (Auth.isLoggedIn()) {
+            window.location.href = 'portal.html';
+            return;
+        }
+
+        // Check if setup is needed
+        checkSetup();
+
+        async function checkSetup() {
+            try {
+                const res = await fetch('/api/setup');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.needsSetup) {
+                        loginCard.hidden = true;
+                        setupCard.hidden = false;
+                    } else {
+                        loginCard.hidden = false;
+                        setupCard.hidden = true;
+                    }
+                }
+            } catch (e) {
+                // API not available — show login form by default
+                loginCard.hidden = false;
+                setupCard.hidden = true;
+            }
+        }
+
+        function showError(el, msg) {
+            el.textContent = msg;
+            el.hidden = false;
+        }
+
+        function hideError(el) {
+            el.hidden = true;
+            el.textContent = '';
+        }
+
+        function setLoading(btn, loading) {
+            const text = btn.querySelector('.btn-text');
+            const spinner = btn.querySelector('.btn-spinner');
+            btn.disabled = loading;
+            text.hidden = loading;
+            spinner.hidden = !loading;
+        }
+
+        // Login handler
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideError(loginError);
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showError(loginError, 'Please enter your email and password.');
+                return;
+            }
+
+            setLoading(loginBtn, true);
+            try {
+                await Auth.login(email, password);
+                window.location.href = 'portal.html';
+            } catch (err) {
+                showError(loginError, err.message || 'Login failed. Please check your credentials.');
+            } finally {
+                setLoading(loginBtn, false);
+            }
+        });
+
+        // Setup handler
+        setupForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideError(setupError);
+            const name = document.getElementById('setup-name').value.trim();
+            const email = document.getElementById('setup-email').value.trim();
+            const password = document.getElementById('setup-password').value;
+            const confirm = document.getElementById('setup-confirm').value;
+
+            if (!name || !email || !password || !confirm) {
+                showError(setupError, 'All fields are required.');
+                return;
+            }
+            if (password.length < 8) {
+                showError(setupError, 'Password must be at least 8 characters.');
+                return;
+            }
+            if (password !== confirm) {
+                showError(setupError, 'Passwords do not match.');
+                return;
+            }
+
+            setLoading(setupBtn, true);
+            try {
+                await Auth.setup(name, email, password);
+                window.location.href = 'portal.html';
+            } catch (err) {
+                showError(setupError, err.message || 'Setup failed. Please try again.');
+            } finally {
+                setLoading(setupBtn, false);
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
