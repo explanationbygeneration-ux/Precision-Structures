@@ -6,6 +6,7 @@ const Auth = (function () {
     'use strict';
 
     const TOKEN_KEY = 'ebyg_token';
+    const REFRESH_KEY = 'ebyg_refresh';
     const USER_KEY = 'ebyg_user';
     const API_BASE = '/api';
 
@@ -32,8 +33,17 @@ const Auth = (function () {
         sessionStorage.setItem(USER_KEY, JSON.stringify(user));
     }
 
+    function getRefreshToken() {
+        return sessionStorage.getItem(REFRESH_KEY);
+    }
+
+    function setRefreshToken(token) {
+        sessionStorage.setItem(REFRESH_KEY, token);
+    }
+
     function clearSession() {
         sessionStorage.removeItem(TOKEN_KEY);
+        sessionStorage.removeItem(REFRESH_KEY);
         sessionStorage.removeItem(USER_KEY);
     }
 
@@ -172,6 +182,7 @@ const Auth = (function () {
         }
 
         setToken(data.token);
+        if (data.refreshToken) setRefreshToken(data.refreshToken);
         setUser(data.user || extractUserFromToken(data.token));
 
         return data;
@@ -200,10 +211,15 @@ const Auth = (function () {
             return refreshPromise;
         }
 
+        const storedRefresh = getRefreshToken();
+        if (!storedRefresh) {
+            throw new Error('No refresh token available');
+        }
+
         isRefreshing = true;
         refreshPromise = (async function () {
             try {
-                const data = await api('POST', '/auth/refresh', null, { noAuth: false, _isRetry: true });
+                const data = await api('POST', '/auth/refresh', { refreshToken: storedRefresh }, { noAuth: true, _isRetry: true });
                 if (data.token) {
                     setToken(data.token);
                     if (data.user) {
@@ -228,6 +244,7 @@ const Auth = (function () {
 
         if (data.token) {
             setToken(data.token);
+            if (data.refreshToken) setRefreshToken(data.refreshToken);
             setUser(data.user || extractUserFromToken(data.token));
         }
 

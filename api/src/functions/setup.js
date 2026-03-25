@@ -1,6 +1,6 @@
 const { app } = require('@azure/functions');
 const { getCollection, upsertItem, generateId } = require('../shared/db');
-const { hashPassword, generateToken } = require('../shared/auth');
+const { hashPassword, generateToken, generateRefreshToken } = require('../shared/auth');
 
 // GET /api/setup — check if setup is needed
 app.http('setup-check', {
@@ -69,12 +69,14 @@ app.http('setup', {
             await upsertItem('users', adminUser);
 
             const token = generateToken(adminUser);
+            const refreshToken = generateRefreshToken(adminUser);
 
             return {
                 status: 201,
                 jsonBody: {
                     message: 'Admin user created successfully',
                     token: token,
+                    refreshToken: refreshToken,
                     user: {
                         id: adminUser.id,
                         email: adminUser.email,
