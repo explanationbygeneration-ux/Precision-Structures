@@ -11,12 +11,24 @@
   <meta property="og:site_name" content="Precision Structures Inc.">
   <meta property="og:locale" content="en_US">
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://www.precisionstructures.net/gallery.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.precisionstructures.net/"},
+      {"@type": "ListItem", "position": 2, "name": "Gallery", "item": "https://www.precisionstructures.net/gallery.html"}
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600;700&family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- TOP BAR -->
   <div class="top-bar">
@@ -66,7 +78,7 @@
   </div>
 
   <!-- PAGE HEADER -->
-  <section class="page-header">
+  <section class="page-header" id="main-content">
     <div class="breadcrumbs">
       <a href="index.html">Home</a> &gt; Gallery
     </div>
@@ -289,7 +301,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">&copy; 2025 Precision Structures Inc. &mdash; Hooper, Utah. Family owned since 1990.</span>
+      <span class="footer-copy">&copy; 2026 Precision Structures Inc. &mdash; Hooper, Utah. Family owned since 1990.</span>
       <a href="tel:+18019853000" class="footer-phone">(801) 985-3000</a>
     </div>
   </footer>
@@ -309,6 +321,47 @@
   <script src="js/main.js"></script>
   <script src="js/chatbot.js"></script>
   <script>
+    // ---- DYNAMIC GALLERY LOADING ----
+    // Attempt to load gallery from API; if unavailable, keep hardcoded HTML as fallback
+    (async function () {
+      try {
+        var response = await fetch('/api/media/public');
+        if (!response.ok) throw new Error('API unavailable');
+        var data = await response.json();
+        var items = data.items || [];
+        if (!items.length) throw new Error('No items');
+
+        var grid = document.querySelector('.gallery-grid');
+        if (!grid) return;
+
+        grid.innerHTML = items.map(function (item) {
+          return '<div class="gallery-item reveal" data-category="' + (item.category || 'roof') + '">' +
+            '<img src="' + item.url + '" alt="' + (item.alt_text || item.title || '') + '">' +
+            '<div class="gallery-label"><span>' + (item.title || '') + '</span></div>' +
+            '<div class="gallery-overlay">' +
+              '<span>' + (item.title || '') + '</span>' +
+              '<button class="gallery-view-btn">View Gallery</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        // Re-init scroll reveal for new items
+        if (typeof IntersectionObserver !== 'undefined') {
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.1 });
+          grid.querySelectorAll('.reveal').forEach(function (el) { observer.observe(el); });
+        }
+      } catch (e) {
+        // API not available — keep hardcoded gallery items as fallback
+      }
+    })();
+
     // When a real image loads, remove the placeholder styling
     document.querySelectorAll('.gallery-item img').forEach(img => {
       img.addEventListener('load', () => {

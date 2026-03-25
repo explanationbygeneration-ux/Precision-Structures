@@ -25,7 +25,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/"
-          # api_location: "api"  # uncomment when Azure Functions are added
+          api_location: "api"
           output_location: ""
           production_branch: "master"
           deployment_environment: ${{ github.ref != 'refs/heads/master' && 'develop' || '' }}

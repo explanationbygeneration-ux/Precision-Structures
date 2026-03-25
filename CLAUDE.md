@@ -1,9 +1,8 @@
 # Precision Structures Inc. — Claude Code Instructions
 
 ## Git Workflow
+- On startup in this repo, check out the `develop` branch if not already on it.
 - **Always work on the `develop` branch.** Never commit directly to `master` unless explicitly instructed.
-- Before making changes, verify you are on `develop` with `git branch --show-current`.
-- If on `master`, switch to `develop` first: `git checkout develop`
 - Production deploys happen only when the user explicitly merges `develop` into `master`.
 
 ## Project Context

@@ -20,6 +20,13 @@
   --shadow-lg:  0 8px 40px rgba(27,79,160,0.12);
 }
 html { scroll-behavior: smooth; }
+.skip-link {
+  position: absolute; top: -100px; left: 0; z-index: 9999;
+  background: var(--blue); color: var(--white); padding: 0.8rem 1.5rem;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem;
+  text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.skip-link:focus { top: 0; }
 body { font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--charcoal); overflow-x: hidden; }
 img { max-width: 100%; height: auto; }
 a { transition: color 0.2s; }
