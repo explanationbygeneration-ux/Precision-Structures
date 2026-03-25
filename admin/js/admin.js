@@ -100,19 +100,19 @@
                 loadDashboard();
                 break;
             case 'content-hero':
-                loadContent('index', 'hero');
+                loadContent('index.html', 'hero');
                 break;
             case 'content-about':
-                loadContent('about', 'about');
+                loadContent('about.html', 'main-content');
                 break;
             case 'content-services':
-                loadContent('services', 'services');
+                loadContent('services.html', 'services');
                 break;
             case 'content-gallery':
-                loadContent('gallery', 'gallery');
+                loadContent('gallery.html', 'gallery-items');
                 break;
             case 'content-contact':
-                loadContent('contact', 'contact');
+                loadContent('contact.html', 'contact-info');
                 break;
             case 'review-queue':
                 loadPendingReviews();
@@ -257,33 +257,43 @@
     // CONTENT EDITORS
     // ============================================================
 
+    // Map view areas to their section IDs used in the published-reference elements
+    var areaToViewId = {
+        'hero': 'hero',
+        'main-content': 'about',
+        'services': 'services',
+        'gallery-items': 'gallery',
+        'contact-info': 'contact'
+    };
+
+    // Map areas to the public page URLs for the live preview iframe
+    var areaToPageUrl = {
+        'hero': '/',
+        'main-content': '/about.html',
+        'services': '/services.html',
+        'gallery-items': '/gallery.html',
+        'contact-info': '/contact.html'
+    };
+
     function setupContentEditors() {
         // Save Draft buttons
         document.querySelectorAll('.save-draft-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                const form = this.closest('.editor-form');
-                if (form) {
-                    const page = form.getAttribute('data-page');
-                    const area = form.getAttribute('data-area');
-                    saveContent(page, area, 'draft');
-                }
+                var form = this.closest('.editor-form');
+                if (form) saveDraft(form);
             });
         });
 
         // Submit for Review buttons
         document.querySelectorAll('.submit-review-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                const form = this.closest('.editor-form');
-                if (form) {
-                    const page = form.getAttribute('data-page');
-                    const area = form.getAttribute('data-area');
-                    saveContent(page, area, 'submit');
-                }
+                var form = this.closest('.editor-form');
+                if (form) submitForReview(form);
             });
         });
 
         // Add Service button
-        const addServiceBtn = document.getElementById('add-service-btn');
+        var addServiceBtn = document.getElementById('add-service-btn');
         if (addServiceBtn) {
             addServiceBtn.addEventListener('click', function () {
                 addRepeatableItem('services');
@@ -291,51 +301,119 @@
         }
 
         // Add Gallery button
-        const addGalleryBtn = document.getElementById('add-gallery-btn');
+        var addGalleryBtn = document.getElementById('add-gallery-btn');
         if (addGalleryBtn) {
             addGalleryBtn.addEventListener('click', function () {
                 addRepeatableItem('gallery');
             });
         }
+
+        // Wire up live preview on all editor form inputs
+        document.querySelectorAll('.editor-form input, .editor-form textarea, .editor-form select').forEach(function (input) {
+            input.addEventListener('input', function () {
+                var form = this.closest('.editor-form');
+                if (form) updateLivePreview(form);
+            });
+        });
     }
 
     async function loadContent(page, area) {
+        var viewId = areaToViewId[area] || area;
+
+        // Render the live preview iframe
+        renderLivePreview(area);
+
         try {
-            const data = await Auth.api('GET', '/content/' + page + '/' + area);
+            var data = await Auth.api('GET', '/content/' + encodeURIComponent(page) + '/' + encodeURIComponent(area));
 
-            // Populate published reference
-            renderPublishedReference(area, data.published || {});
-
-            // Populate form fields
-            populateForm(area, data.draft || data.published || {});
+            // Populate form fields from published content if available
+            if (data.snapshot && data.snapshot.field_values) {
+                populateForm(viewId, data.snapshot.field_values);
+            }
 
             // Load version history
-            renderVersionHistory(area, data.versions || []);
+            await loadVersionHistory(page, area, viewId);
 
         } catch (err) {
             console.warn('Failed to load content for ' + page + '/' + area + ':', err.message);
         }
     }
 
-    function renderPublishedReference(area, published) {
-        const refEl = document.getElementById(area + '-ref-content');
+    function renderLivePreview(area) {
+        var viewId = areaToViewId[area] || area;
+        var refEl = document.getElementById(viewId + '-ref-content');
         if (!refEl) return;
 
-        const fields = Object.keys(published);
-        if (!fields.length) {
-            refEl.innerHTML = '<p class="empty-state">No published content yet.</p>';
+        var pageUrl = areaToPageUrl[area];
+        if (!pageUrl) {
+            refEl.innerHTML = '<p class="empty-state">No preview available for this section.</p>';
             return;
         }
 
-        refEl.innerHTML = fields.map(function (key) {
-            let value = published[key];
-            if (Array.isArray(value)) {
-                value = value.length + ' items';
-            } else if (typeof value === 'object' && value !== null) {
-                value = JSON.stringify(value);
-            }
-            return '<div class="ref-field"><strong>' + escapeHtml(formatFieldName(key)) + '</strong>' + escapeHtml(String(value || '—')) + '</div>';
-        }).join('');
+        refEl.innerHTML =
+            '<iframe id="preview-' + viewId + '" ' +
+                'src="' + pageUrl + '" ' +
+                'class="live-preview-iframe" ' +
+                'title="Live preview of ' + viewId + ' section" ' +
+                'sandbox="allow-same-origin allow-scripts">' +
+            '</iframe>';
+    }
+
+    function updateLivePreview(form) {
+        // Find the area from the closest view section
+        var viewSection = form.closest('.view[data-view]');
+        if (!viewSection) return;
+        var viewName = viewSection.getAttribute('data-view');
+
+        // Map view name back to area
+        var areaMap = {
+            'content-hero': 'hero',
+            'content-about': 'main-content',
+            'content-services': 'services',
+            'content-gallery': 'gallery-items',
+            'content-contact': 'contact-info'
+        };
+        var area = areaMap[viewName];
+        if (!area) return;
+
+        var viewId = areaToViewId[area] || area;
+        var iframe = document.getElementById('preview-' + viewId);
+        if (!iframe || !iframe.contentDocument) return;
+
+        var doc = iframe.contentDocument;
+        var inputs = form.querySelectorAll('input[name], textarea[name], select[name]');
+
+        inputs.forEach(function (input) {
+            var fieldName = input.name;
+            var value = input.value;
+            if (!fieldName || !value) return;
+
+            // Find matching data-cms-field elements in the iframe
+            var targets = doc.querySelectorAll('[data-cms-field="' + fieldName + '"]');
+            targets.forEach(function (target) {
+                if (/_link$|_url$/.test(fieldName) && target.tagName === 'A') {
+                    target.setAttribute('href', value);
+                } else if (/_email$/.test(fieldName) && target.tagName === 'A') {
+                    target.textContent = value;
+                    target.setAttribute('href', 'mailto:' + value);
+                } else if (fieldName === 'phone' && target.tagName === 'A') {
+                    target.textContent = value;
+                    target.setAttribute('href', 'tel:' + value.replace(/\D/g, ''));
+                } else {
+                    target.textContent = value;
+                }
+            });
+        });
+    }
+
+    async function loadVersionHistory(page, area, viewId) {
+        try {
+            var data = await Auth.api('GET', '/content/' + encodeURIComponent(page) + '/' + encodeURIComponent(area) + '/history');
+            var versions = Array.isArray(data) ? data : [];
+            renderVersionHistory(viewId, versions);
+        } catch (err) {
+            // History not available, not critical
+        }
     }
 
     function populateForm(area, data) {
@@ -515,49 +593,70 @@
         return { items: items };
     }
 
-    async function saveContent(page, area, action) {
-        const data = collectFormData(page, area);
+    function getFormPageArea(form) {
+        // Get the page and area from the closest view section
+        var viewSection = form.closest('.view[data-view]');
+        if (!viewSection) return null;
+        var viewName = viewSection.getAttribute('data-view');
+        var map = {
+            'content-hero': { page: 'index.html', area: 'hero' },
+            'content-about': { page: 'about.html', area: 'main-content' },
+            'content-services': { page: 'services.html', area: 'services' },
+            'content-gallery': { page: 'gallery.html', area: 'gallery-items' },
+            'content-contact': { page: 'contact.html', area: 'contact-info' }
+        };
+        return map[viewName] || null;
+    }
 
-        // Basic validation
-        if (area === 'hero' && !data.headline) {
-            showToast('Headline is required.', 'error');
-            return;
-        }
-        if (area === 'about' && !data.heading) {
-            showToast('Heading is required.', 'error');
-            return;
-        }
+    async function saveDraft(form) {
+        var info = getFormPageArea(form);
+        if (!info) return;
+
+        var viewId = areaToViewId[info.area] || info.area;
+        var data = collectFormData(info.page, viewId);
 
         try {
-            // Save the draft
-            const saveResult = await Auth.api('PUT', '/content/' + page + '/' + area, {
-                fields: data,
+            await Auth.api('PUT', '/content/' + encodeURIComponent(info.page) + '/' + encodeURIComponent(info.area), {
+                field_values: data
+            });
+            showToast('Draft saved successfully.', 'success');
+        } catch (err) {
+            showToast(err.message || 'Failed to save draft.', 'error');
+        }
+    }
+
+    async function submitForReview(form) {
+        var info = getFormPageArea(form);
+        if (!info) return;
+
+        var viewId = areaToViewId[info.area] || info.area;
+        var data = collectFormData(info.page, viewId);
+
+        try {
+            // First save as draft
+            var saveResult = await Auth.api('PUT', '/content/' + encodeURIComponent(info.page) + '/' + encodeURIComponent(info.area), {
+                field_values: data
             });
 
-            const snapshotId = saveResult.snapshotId || saveResult.id;
-
-            if (action === 'submit' && snapshotId) {
-                // Submit for review
-                await Auth.api('POST', '/content/' + page + '/' + area + '/submit', {
-                    snapshotId: snapshotId,
-                });
-                showToast('Content submitted for review.', 'success');
-            } else if (action === 'submit') {
-                // No snapshot ID but user wanted to submit — try submit directly
-                await Auth.api('POST', '/content/' + page + '/' + area + '/submit', {
-                    fields: data,
-                });
-                showToast('Content submitted for review.', 'success');
-            } else {
-                showToast('Draft saved successfully.', 'success');
+            var snapshotId = saveResult.id;
+            if (!snapshotId) {
+                showToast('Failed to get snapshot ID.', 'error');
+                return;
             }
+
+            // Then submit for review
+            await Auth.api('POST', '/content/' + encodeURIComponent(info.page) + '/' + encodeURIComponent(info.area) + '/submit/' + snapshotId);
+            showToast('Content submitted for review.', 'success');
+
+            // Reload version history
+            await loadVersionHistory(info.page, info.area, viewId);
         } catch (err) {
-            showToast(err.message || 'Failed to save content.', 'error');
+            showToast(err.message || 'Failed to submit for review.', 'error');
         }
     }
 
     function renderVersionHistory(area, versions) {
-        const container = document.getElementById(area + '-versions');
+        var container = document.getElementById(area + '-versions');
         if (!container) return;
 
         if (!versions.length) {
@@ -565,42 +664,18 @@
             return;
         }
 
-        container.innerHTML = versions.map(function (v) {
-            const date = v.createdAt ? formatRelativeTime(v.createdAt) : '';
+        container.innerHTML = versions.slice(0, 20).map(function (v) {
+            var date = v.created_at ? formatDate(v.created_at) : '';
+            var statusClass = 'badge-status-' + (v.status || 'pending');
             return '<div class="version-item">' +
                 '<div class="version-meta">' +
-                    '<span class="version-author">' + escapeHtml(v.userName || 'Unknown') + '</span>' +
-                    '<span class="badge badge-status-' + (v.status || 'pending') + '">' + escapeHtml(v.status || 'draft') + '</span>' +
+                    '<span class="badge ' + statusClass + '">' + escapeHtml(v.status || 'pending') + '</span>' +
                 '</div>' +
                 '<div class="version-date">' + escapeHtml(date) + '</div>' +
-                (v.id ? '<button class="version-restore-btn" data-version-id="' + v.id + '" data-area="' + area + '">Restore this version</button>' : '') +
+                (v.notes ? '<div class="version-notes">' + escapeHtml(v.notes) + '</div>' : '') +
             '</div>';
         }).join('');
 
-        // Wire restore buttons
-        container.querySelectorAll('.version-restore-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                restoreVersion(this.getAttribute('data-area'), this.getAttribute('data-version-id'));
-            });
-        });
-    }
-
-    async function restoreVersion(area, versionId) {
-        showModal(
-            'Restore Version',
-            '<p>Are you sure you want to restore this version? Your current draft will be overwritten.</p>',
-            async function () {
-                try {
-                    const data = await Auth.api('POST', '/content/versions/' + versionId + '/restore');
-                    if (data.fields) {
-                        populateForm(area, data.fields);
-                    }
-                    showToast('Version restored. Review and save when ready.', 'info');
-                } catch (err) {
-                    showToast(err.message || 'Failed to restore version.', 'error');
-                }
-            }
-        );
     }
 
     // ============================================================

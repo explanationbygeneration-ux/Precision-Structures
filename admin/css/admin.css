@@ -710,6 +710,14 @@ img {
     line-height: 1.6;
 }
 
+.live-preview-iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-radius: var(--radius);
+    background: #fff;
+}
+
 .ref-field {
     margin-bottom: 8px;
 }
