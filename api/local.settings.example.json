@@ -6,6 +6,8 @@
         "COSMOS_ENDPOINT": "https://your-account.documents.azure.com:443/",
         "COSMOS_KEY": "your-cosmos-db-primary-key",
         "COSMOS_DATABASE": "precision-portal",
+        "BLOB_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=your-account;AccountKey=your-key;EndpointSuffix=core.windows.net",
+        "BLOB_CONTAINER": "gallery",
         "JWT_SECRET": "change-this-to-a-strong-random-secret"
     }
 }

@@ -1031,6 +1031,9 @@
     // MEDIA LIBRARY
     // ============================================================
 
+    var mediaItems = []; // Local cache of media items
+    var dragSrcEl = null; // For drag-and-drop reorder
+
     function setupMediaLibrary() {
         var uploadBtn = document.getElementById('media-upload-btn');
         var fileInput = document.getElementById('media-file-input');
@@ -1044,40 +1047,150 @@
                 if (!this.files || !this.files.length) return;
                 var file = this.files[0];
 
-                // Validate file size (10 MB max)
                 if (file.size > 10 * 1024 * 1024) {
                     showToast('File too large. Maximum size is 10 MB.', 'error');
                     this.value = '';
                     return;
                 }
 
-                var formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    var token = Auth.getToken();
-                    var response = await fetch('/api/media', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        body: formData,
-                    });
-
-                    if (!response.ok) {
-                        var errData = await response.json().catch(function () { return {}; });
-                        throw new Error(errData.error || 'Upload failed.');
-                    }
-
-                    showToast('File uploaded successfully.', 'success');
-                    loadMedia();
-                } catch (err) {
-                    showToast(err.message || 'Failed to upload file.', 'error');
-                }
-
+                // Show upload dialog for metadata
+                showMediaUploadDialog(file);
                 this.value = '';
             });
         }
+
+        // Delegate click events on the media grid
+        var grid = document.getElementById('media-grid');
+        if (grid) {
+            grid.addEventListener('click', function (e) {
+                var editBtn = e.target.closest('.media-edit-btn');
+                var deleteBtn = e.target.closest('.media-delete-btn');
+
+                if (editBtn) {
+                    var id = editBtn.getAttribute('data-id');
+                    showMediaEditDialog(id);
+                } else if (deleteBtn) {
+                    var id = deleteBtn.getAttribute('data-id');
+                    confirmMediaDelete(id);
+                }
+            });
+        }
+    }
+
+    function showMediaUploadDialog(file) {
+        var bodyHtml =
+            '<div class="form-group">' +
+                '<label>File: <strong>' + escapeHtml(file.name) + '</strong> (' + (file.size / 1024).toFixed(1) + ' KB)</label>' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label for="upload-title">Title</label>' +
+                '<input type="text" id="upload-title" class="input-full" value="' + escapeAttr(file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')) + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label for="upload-category">Category</label>' +
+                '<select id="upload-category" class="input-full">' +
+                    '<option value="roof">Roof Trusses</option>' +
+                    '<option value="floor">Floor Trusses</option>' +
+                    '<option value="custom">Custom Projects</option>' +
+                    '<option value="delivery">Delivery</option>' +
+                '</select>' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label for="upload-alt">Alt Text (accessibility)</label>' +
+                '<input type="text" id="upload-alt" class="input-full" placeholder="Describe the image for screen readers">' +
+            '</div>';
+
+        showModal('Upload Image', bodyHtml, async function () {
+            var title = document.getElementById('upload-title').value || file.name;
+            var category = document.getElementById('upload-category').value || 'roof';
+            var altText = document.getElementById('upload-alt').value || title;
+
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('alt_text', altText);
+
+            try {
+                var token = Auth.getToken();
+                var response = await fetch('/api/media', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    var errData = await response.json().catch(function () { return {}; });
+                    throw new Error(errData.error || 'Upload failed.');
+                }
+
+                showToast('Image uploaded successfully.', 'success');
+                await loadMedia();
+            } catch (err) {
+                showToast(err.message || 'Failed to upload image.', 'error');
+            }
+        });
+    }
+
+    function showMediaEditDialog(id) {
+        var item = mediaItems.find(function (m) { return m.id === id; });
+        if (!item) return;
+
+        var bodyHtml =
+            '<div class="form-group">' +
+                '<label for="edit-title">Title</label>' +
+                '<input type="text" id="edit-title" class="input-full" value="' + escapeAttr(item.title || '') + '">' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label for="edit-category">Category</label>' +
+                '<select id="edit-category" class="input-full">' +
+                    '<option value="roof"' + (item.category === 'roof' ? ' selected' : '') + '>Roof Trusses</option>' +
+                    '<option value="floor"' + (item.category === 'floor' ? ' selected' : '') + '>Floor Trusses</option>' +
+                    '<option value="custom"' + (item.category === 'custom' ? ' selected' : '') + '>Custom Projects</option>' +
+                    '<option value="delivery"' + (item.category === 'delivery' ? ' selected' : '') + '>Delivery</option>' +
+                '</select>' +
+            '</div>' +
+            '<div class="form-group">' +
+                '<label for="edit-alt">Alt Text</label>' +
+                '<input type="text" id="edit-alt" class="input-full" value="' + escapeAttr(item.alt_text || '') + '">' +
+            '</div>';
+
+        showModal('Edit Image', bodyHtml, async function () {
+            var title = document.getElementById('edit-title').value;
+            var category = document.getElementById('edit-category').value;
+            var altText = document.getElementById('edit-alt').value;
+
+            try {
+                await Auth.api('PUT', '/media/' + id, {
+                    title: title,
+                    category: category,
+                    alt_text: altText
+                });
+                showToast('Image updated.', 'success');
+                await loadMedia();
+            } catch (err) {
+                showToast(err.message || 'Failed to update image.', 'error');
+            }
+        });
+    }
+
+    function confirmMediaDelete(id) {
+        var item = mediaItems.find(function (m) { return m.id === id; });
+        if (!item) return;
+
+        showModal(
+            'Delete Image',
+            '<p>Are you sure you want to delete <strong>' + escapeHtml(item.title || item.filename) + '</strong>? This cannot be undone.</p>',
+            async function () {
+                try {
+                    await Auth.api('DELETE', '/media/' + id);
+                    showToast('Image deleted.', 'success');
+                    await loadMedia();
+                } catch (err) {
+                    showToast(err.message || 'Failed to delete image.', 'error');
+                }
+            }
+        );
     }
 
     async function loadMedia() {
@@ -1087,27 +1200,104 @@
         try {
             var data = await Auth.api('GET', '/media');
             var files = data.files || data.items || [];
+            mediaItems = files;
 
             if (!files.length) {
-                grid.innerHTML = '<p class="empty-state">No media files uploaded yet.</p>';
+                grid.innerHTML = '<p class="empty-state">No media files uploaded yet. Click "Upload File" to add gallery images.</p>';
                 return;
             }
 
-            grid.innerHTML = files.map(function (f) {
-                var isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.filename || f.name || '');
-                var preview = isImage
-                    ? '<img src="' + escapeAttr(f.url || '') + '" alt="' + escapeAttr(f.filename || f.name || '') + '">'
-                    : '<span style="font-size:2rem;color:var(--slate-light);">&#128196;</span>';
+            var user = Auth.getUser();
+            var isAdmin = user && user.role === 'admin';
 
-                return '<div class="media-item">' +
+            grid.innerHTML = files.map(function (f, index) {
+                var preview = '<img src="' + escapeAttr(f.url || '') + '" alt="' + escapeAttr(f.alt_text || f.title || '') + '" loading="lazy">';
+                var categoryLabel = { roof: 'Roof', floor: 'Floor', custom: 'Custom', delivery: 'Delivery' }[f.category] || f.category || '';
+
+                return '<div class="media-item" draggable="true" data-id="' + escapeAttr(f.id) + '" data-index="' + index + '">' +
                     '<div class="media-item-preview">' + preview + '</div>' +
-                    '<div class="media-item-info">' + escapeHtml(f.filename || f.name || 'Unnamed') + '</div>' +
+                    '<div class="media-item-details">' +
+                        '<div class="media-item-title">' + escapeHtml(f.title || f.filename || 'Untitled') + '</div>' +
+                        '<span class="badge badge-category">' + escapeHtml(categoryLabel) + '</span>' +
+                    '</div>' +
+                    '<div class="media-item-actions">' +
+                        '<button class="btn btn-secondary btn-xs media-edit-btn" data-id="' + escapeAttr(f.id) + '">Edit</button>' +
+                        (isAdmin ? '<button class="btn btn-danger btn-xs media-delete-btn" data-id="' + escapeAttr(f.id) + '">Delete</button>' : '') +
+                    '</div>' +
                 '</div>';
             }).join('');
+
+            // Setup drag-and-drop reorder
+            setupMediaDragDrop();
+
         } catch (err) {
             grid.innerHTML = '<p class="empty-state">Failed to load media library.</p>';
             console.warn('Media load failed:', err.message);
         }
+    }
+
+    function setupMediaDragDrop() {
+        var grid = document.getElementById('media-grid');
+        if (!grid) return;
+
+        var items = grid.querySelectorAll('.media-item[draggable]');
+        items.forEach(function (item) {
+            item.addEventListener('dragstart', function (e) {
+                dragSrcEl = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', this.getAttribute('data-id'));
+            });
+
+            item.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                this.classList.add('drag-over');
+            });
+
+            item.addEventListener('dragleave', function () {
+                this.classList.remove('drag-over');
+            });
+
+            item.addEventListener('drop', async function (e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+
+                if (dragSrcEl === this) return;
+
+                // Swap DOM elements
+                var parent = this.parentNode;
+                var allItems = Array.from(parent.querySelectorAll('.media-item[draggable]'));
+                var fromIndex = allItems.indexOf(dragSrcEl);
+                var toIndex = allItems.indexOf(this);
+
+                if (fromIndex < toIndex) {
+                    parent.insertBefore(dragSrcEl, this.nextSibling);
+                } else {
+                    parent.insertBefore(dragSrcEl, this);
+                }
+
+                // Build new order and save
+                var reordered = Array.from(parent.querySelectorAll('.media-item[draggable]'));
+                var order = reordered.map(function (el, i) {
+                    return { id: el.getAttribute('data-id'), sort_order: i + 1 };
+                });
+
+                try {
+                    await Auth.api('PUT', '/media/reorder', { order: order });
+                    showToast('Gallery order updated.', 'success');
+                } catch (err) {
+                    showToast('Failed to save new order.', 'error');
+                    await loadMedia(); // Reload to reset
+                }
+            });
+
+            item.addEventListener('dragend', function () {
+                this.classList.remove('dragging');
+                var allItems = grid.querySelectorAll('.media-item');
+                allItems.forEach(function (el) { el.classList.remove('drag-over'); });
+            });
+        });
     }
 
     // ============================================================
