@@ -403,3 +403,42 @@ app.http('content-pending', {
         }
     }
 });
+
+// GET /api/content/public/{page} — public endpoint, returns all published areas for a page (no auth)
+app.http('content-public', {
+    methods: ['GET'],
+    authLevel: 'anonymous',
+    route: 'content/public/{page}',
+    handler: async (request, context) => {
+        try {
+            const page = request.params.page;
+            const areas = VALID_AREAS[page];
+
+            if (!areas) {
+                return { status: 404, jsonBody: { error: `Unknown page: ${page}` } };
+            }
+
+            const snapshots = await getCollection('snapshots');
+            const result = {};
+
+            for (const area of areas) {
+                const published = snapshots
+                    .filter(s => s.page === page && s.area === area && s.status === 'published')
+                    .sort((a, b) => new Date(b.published_at || b.updated_at) - new Date(a.published_at || a.updated_at));
+
+                if (published.length > 0) {
+                    result[area] = published[0].field_values || null;
+                }
+            }
+
+            return {
+                status: 200,
+                headers: { 'Cache-Control': 'public, max-age=300' },
+                jsonBody: { page, areas: result }
+            };
+        } catch (err) {
+            context.error('Content public error:', err);
+            return { status: 500, jsonBody: { error: 'Internal server error' } };
+        }
+    }
+});
