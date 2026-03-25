@@ -1,0 +1,11 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "",
+        "FUNCTIONS_WORKER_RUNTIME": "node",
+        "COSMOS_ENDPOINT": "https://your-account.documents.azure.com:443/",
+        "COSMOS_KEY": "your-cosmos-db-primary-key",
+        "COSMOS_DATABASE": "precision-portal",
+        "JWT_SECRET": "change-this-to-a-strong-random-secret"
+    }
+}

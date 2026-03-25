@@ -1,23 +1,69 @@
-const fs = require('fs');
-const path = require('path');
+const { CosmosClient } = require('@azure/cosmos');
 const { v4: uuidv4 } = require('uuid');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const COSMOS_ENDPOINT = process.env.COSMOS_ENDPOINT;
+const COSMOS_KEY = process.env.COSMOS_KEY;
+const DATABASE_NAME = process.env.COSMOS_DATABASE || 'precision-portal';
+
+// Container partition keys
+const CONTAINER_CONFIG = {
+    users: '/id',
+    snapshots: '/page',
+    audit: '/id',
+    media: '/id'
+};
+
+let client = null;
+let database = null;
+const containers = {};
 
 /**
- * Reads and returns the array from data/{name}.json.
- * Creates the file with an empty array if it does not exist.
+ * Get or create the Cosmos DB client and database.
+ * Lazily initializes on first call.
  */
-function getCollection(name) {
-    const filePath = path.join(DATA_DIR, `${name}.json`);
+async function getDatabase() {
+    if (database) return database;
+
+    if (!COSMOS_ENDPOINT || !COSMOS_KEY) {
+        throw new Error(
+            'Cosmos DB not configured. Set COSMOS_ENDPOINT and COSMOS_KEY environment variables.'
+        );
+    }
+
+    client = new CosmosClient({ endpoint: COSMOS_ENDPOINT, key: COSMOS_KEY });
+    const { database: db } = await client.databases.createIfNotExists({ id: DATABASE_NAME });
+    database = db;
+    return database;
+}
+
+/**
+ * Get or create a container by name.
+ */
+async function getContainer(name) {
+    if (containers[name]) return containers[name];
+
+    const db = await getDatabase();
+    const partitionKey = CONTAINER_CONFIG[name] || '/id';
+
+    const { container } = await db.containers.createIfNotExists({
+        id: name,
+        partitionKey: { paths: [partitionKey] }
+    });
+
+    containers[name] = container;
+    return container;
+}
+
+/**
+ * Read all items from a container.
+ * Returns an array of documents (without Cosmos metadata).
+ */
+async function getCollection(name) {
     try {
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(DATA_DIR, { recursive: true });
-            fs.writeFileSync(filePath, '[]', 'utf8');
-            return [];
-        }
-        const raw = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(raw);
+        const container = await getContainer(name);
+        const { resources } = await container.items.readAll().fetchAll();
+        // Strip Cosmos metadata fields
+        return resources.map(stripCosmosFields);
     } catch (err) {
         console.error(`Error reading collection "${name}":`, err);
         return [];
@@ -25,36 +71,54 @@ function getCollection(name) {
 }
 
 /**
- * Writes the array to data/{name}.json.
+ * Insert or update a single item in a container.
+ * Returns the upserted item.
  */
-function saveCollection(name, data) {
-    const filePath = path.join(DATA_DIR, `${name}.json`);
-    try {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-    } catch (err) {
-        console.error(`Error saving collection "${name}":`, err);
-        throw err;
-    }
+async function upsertItem(name, item) {
+    const container = await getContainer(name);
+    const { resource } = await container.items.upsert(item);
+    return stripCosmosFields(resource);
 }
 
 /**
- * Finds an item by id in an array.
+ * Delete a single item from a container by id.
+ * For containers with partition key /id, pass the id as partition key value.
+ * For containers with other partition keys, pass the partition key value.
+ */
+async function deleteItem(name, id, partitionKeyValue) {
+    const container = await getContainer(name);
+    const pkValue = partitionKeyValue || id;
+    await container.item(id, pkValue).delete();
+}
+
+/**
+ * Find an item by id in a pre-fetched array.
  */
 function findById(collection, id) {
     return collection.find(item => item.id === id) || null;
 }
 
 /**
- * Generates a new UUID.
+ * Generate a new UUID.
  */
 function generateId() {
     return uuidv4();
 }
 
+/**
+ * Remove Cosmos DB system properties from a document.
+ */
+function stripCosmosFields(doc) {
+    if (!doc) return doc;
+    const { _rid, _self, _etag, _attachments, _ts, ...clean } = doc;
+    return clean;
+}
+
 module.exports = {
     getCollection,
-    saveCollection,
+    upsertItem,
+    deleteItem,
     findById,
-    generateId
+    generateId,
+    getContainer
 };

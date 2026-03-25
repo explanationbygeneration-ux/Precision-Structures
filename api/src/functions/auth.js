@@ -62,7 +62,7 @@ app.http('auth-login', {
                 };
             }
 
-            const users = getCollection('users');
+            const users = await getCollection('users');
             const user = users.find(u => u.email === email);
 
             if (!user) {
@@ -143,7 +143,7 @@ app.http('auth-refresh', {
                 };
             }
 
-            const users = getCollection('users');
+            const users = await getCollection('users');
             const user = findById(users, decoded.id);
 
             if (!user || user.is_active === false) {
@@ -184,7 +184,7 @@ app.http('auth-me', {
                 };
             }
 
-            const users = getCollection('users');
+            const users = await getCollection('users');
             const user = findById(users, payload.id);
 
             if (!user || user.is_active === false) {

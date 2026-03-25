@@ -1,4 +1,4 @@
-const { getCollection, saveCollection, generateId } = require('./db');
+const { upsertItem, generateId } = require('./db');
 
 /**
  * Append an audit log entry.
@@ -10,7 +10,6 @@ const { getCollection, saveCollection, generateId } = require('./db');
  *   user.create, user.update, user.delete
  */
 async function logAction(userId, action, target, details, ipAddress) {
-    const audit = getCollection('audit');
     const entry = {
         id: generateId(),
         userId,
@@ -20,8 +19,7 @@ async function logAction(userId, action, target, details, ipAddress) {
         ipAddress: ipAddress || null,
         timestamp: new Date().toISOString()
     };
-    audit.push(entry);
-    saveCollection('audit', audit);
+    await upsertItem('audit', entry);
     return entry;
 }
 

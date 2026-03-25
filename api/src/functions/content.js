@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { getCollection, saveCollection, findById, generateId } = require('../shared/db');
+const { getCollection, upsertItem, findById, generateId } = require('../shared/db');
 const { requireRole } = require('../shared/auth');
 const { logAction } = require('../shared/audit');
 
@@ -33,8 +33,8 @@ function getClientIp(request) {
  * Returns the current published snapshot for a page/area,
  * or null if nothing has been published yet.
  */
-function getPublishedContent(page, area) {
-    const snapshots = getCollection('snapshots');
+async function getPublishedContent(page, area) {
+    const snapshots = await getCollection('snapshots');
     const published = snapshots
         .filter(s => s.page === page && s.area === area && s.status === 'published')
         .sort((a, b) => new Date(b.published_at || b.updated_at) - new Date(a.published_at || a.updated_at));
@@ -61,7 +61,7 @@ app.http('content-get', {
                 return { status: 400, jsonBody: { error: validation.error } };
             }
 
-            const published = getPublishedContent(page, area);
+            const published = await getPublishedContent(page, area);
             if (published) {
                 return {
                     status: 200,
@@ -122,7 +122,6 @@ app.http('content-put', {
                 };
             }
 
-            const snapshots = getCollection('snapshots');
             const snapshot = {
                 id: generateId(),
                 page,
@@ -135,8 +134,7 @@ app.http('content-put', {
                 updated_at: new Date().toISOString()
             };
 
-            snapshots.push(snapshot);
-            saveCollection('snapshots', snapshots);
+            await upsertItem('snapshots', snapshot);
 
             await logAction(
                 auth.user.id,
@@ -174,7 +172,7 @@ app.http('content-history', {
                 return { status: 400, jsonBody: { error: validation.error } };
             }
 
-            const snapshots = getCollection('snapshots');
+            const snapshots = await getCollection('snapshots');
             const history = snapshots
                 .filter(s => s.page === page && s.area === area)
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -208,7 +206,7 @@ app.http('content-submit', {
                 return { status: 400, jsonBody: { error: validation.error } };
             }
 
-            const snapshots = getCollection('snapshots');
+            const snapshots = await getCollection('snapshots');
             const snapshot = findById(snapshots, id);
 
             if (!snapshot || snapshot.page !== page || snapshot.area !== area) {
@@ -227,7 +225,7 @@ app.http('content-submit', {
             snapshot.submitted_at = new Date().toISOString();
             snapshot.updated_at = new Date().toISOString();
 
-            saveCollection('snapshots', snapshots);
+            await upsertItem('snapshots', snapshot);
 
             await logAction(
                 auth.user.id,
@@ -266,7 +264,7 @@ app.http('content-approve', {
                 return { status: 400, jsonBody: { error: validation.error } };
             }
 
-            const snapshots = getCollection('snapshots');
+            const snapshots = await getCollection('snapshots');
             const snapshot = findById(snapshots, id);
 
             if (!snapshot || snapshot.page !== page || snapshot.area !== area) {
@@ -280,13 +278,15 @@ app.http('content-approve', {
                 };
             }
 
-            // Unpublish any previously published snapshot for this page/area
-            snapshots.forEach(s => {
-                if (s.page === page && s.area === area && s.status === 'published' && s.id !== id) {
-                    s.status = 'archived';
-                    s.updated_at = new Date().toISOString();
-                }
-            });
+            // Archive any previously published snapshot for this page/area
+            const previouslyPublished = snapshots.filter(
+                s => s.page === page && s.area === area && s.status === 'published' && s.id !== id
+            );
+            for (const old of previouslyPublished) {
+                old.status = 'archived';
+                old.updated_at = new Date().toISOString();
+                await upsertItem('snapshots', old);
+            }
 
             snapshot.status = 'published';
             snapshot.approved_by = auth.user.id;
@@ -294,7 +294,7 @@ app.http('content-approve', {
             snapshot.published_at = new Date().toISOString();
             snapshot.updated_at = new Date().toISOString();
 
-            saveCollection('snapshots', snapshots);
+            await upsertItem('snapshots', snapshot);
 
             await logAction(
                 auth.user.id,
@@ -341,7 +341,7 @@ app.http('content-reject', {
                 // No body is acceptable
             }
 
-            const snapshots = getCollection('snapshots');
+            const snapshots = await getCollection('snapshots');
             const snapshot = findById(snapshots, id);
 
             if (!snapshot || snapshot.page !== page || snapshot.area !== area) {
@@ -361,7 +361,7 @@ app.http('content-reject', {
             snapshot.rejection_notes = notes;
             snapshot.updated_at = new Date().toISOString();
 
-            saveCollection('snapshots', snapshots);
+            await upsertItem('snapshots', snapshot);
 
             await logAction(
                 auth.user.id,
@@ -391,7 +391,7 @@ app.http('content-pending', {
                 return { status: auth.status, jsonBody: { error: auth.error } };
             }
 
-            const snapshots = getCollection('snapshots');
+            const snapshots = await getCollection('snapshots');
             const pending = snapshots
                 .filter(s => s.status === 'submitted')
                 .sort((a, b) => new Date(b.submitted_at || b.created_at) - new Date(a.submitted_at || a.created_at));

@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { getCollection, saveCollection, generateId } = require('../shared/db');
+const { getCollection, upsertItem, generateId } = require('../shared/db');
 const { hashPassword, generateToken } = require('../shared/auth');
 
 // GET /api/setup — check if setup is needed
@@ -9,7 +9,7 @@ app.http('setup-check', {
     route: 'setup',
     handler: async (request, context) => {
         try {
-            const users = getCollection('users');
+            const users = await getCollection('users');
             return {
                 status: 200,
                 jsonBody: { needsSetup: users.length === 0 }
@@ -28,7 +28,7 @@ app.http('setup', {
     route: 'setup',
     handler: async (request, context) => {
         try {
-            const users = getCollection('users');
+            const users = await getCollection('users');
 
             if (users.length > 0) {
                 return {
@@ -66,8 +66,7 @@ app.http('setup', {
                 updated_at: new Date().toISOString()
             };
 
-            users.push(adminUser);
-            saveCollection('users', users);
+            await upsertItem('users', adminUser);
 
             const token = generateToken(adminUser);
 

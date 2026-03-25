@@ -20,7 +20,7 @@ app.http('audit-list', {
             const limit = Math.min(Math.max(parseInt(limitParam, 10) || 50, 1), 500);
             const offset = Math.max(parseInt(offsetParam, 10) || 0, 0);
 
-            const audit = getCollection('audit');
+            const audit = await getCollection('audit');
             const sorted = audit.sort(
                 (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
             );

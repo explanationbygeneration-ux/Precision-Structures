@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { getCollection, saveCollection, findById, generateId } = require('../shared/db');
+const { getCollection, upsertItem, findById, generateId } = require('../shared/db');
 const { requireRole, hashPassword } = require('../shared/auth');
 const { logAction } = require('../shared/audit');
 
@@ -29,7 +29,7 @@ app.http('users-list', {
                 return { status: auth.status, jsonBody: { error: auth.error } };
             }
 
-            const users = getCollection('users');
+            const users = await getCollection('users');
             return {
                 status: 200,
                 jsonBody: users.map(sanitizeUser)
@@ -71,7 +71,7 @@ app.http('users-create', {
                 };
             }
 
-            const users = getCollection('users');
+            const users = await getCollection('users');
 
             if (users.find(u => u.email === email)) {
                 return {
@@ -92,8 +92,7 @@ app.http('users-create', {
                 updated_at: new Date().toISOString()
             };
 
-            users.push(newUser);
-            saveCollection('users', users);
+            await upsertItem('users', newUser);
 
             await logAction(
                 auth.user.id,
@@ -124,7 +123,7 @@ app.http('users-update', {
             }
 
             const id = request.params.id;
-            const users = getCollection('users');
+            const users = await getCollection('users');
             const user = findById(users, id);
 
             if (!user) {
@@ -153,7 +152,7 @@ app.http('users-update', {
             }
 
             user.updated_at = new Date().toISOString();
-            saveCollection('users', users);
+            await upsertItem('users', user);
 
             await logAction(
                 auth.user.id,
@@ -184,7 +183,7 @@ app.http('users-delete', {
             }
 
             const id = request.params.id;
-            const users = getCollection('users');
+            const users = await getCollection('users');
             const user = findById(users, id);
 
             if (!user) {
@@ -202,7 +201,7 @@ app.http('users-delete', {
             // Soft delete
             user.is_active = false;
             user.updated_at = new Date().toISOString();
-            saveCollection('users', users);
+            await upsertItem('users', user);
 
             await logAction(
                 auth.user.id,
