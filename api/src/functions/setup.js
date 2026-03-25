@@ -86,7 +86,13 @@ app.http('setup', {
             };
         } catch (err) {
             context.error('Setup error:', err);
-            return { status: 500, jsonBody: { error: 'Internal server error' } };
+            return {
+                status: 500,
+                jsonBody: {
+                    error: 'Setup failed: ' + (err.message || 'Unknown error'),
+                    code: err.code || null
+                }
+            };
         }
     }
 });
