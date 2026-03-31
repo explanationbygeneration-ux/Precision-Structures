@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resources & AI Tools | Precision Structures Inc.</title>
-  <meta name="description" content="Truss resources, AI chat assistant, instant estimate calculator, project planning guide, and terminology from Precision Structures Inc.">
+  <title>Resources | Precision Structures Inc.</title>
+  <meta name="description" content="Truss resources, terminology, project planning guide, and common truss types from Precision Structures Inc. in Hooper, Utah.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Resources & AI Tools | Precision Structures Inc.">
-  <meta property="og:description" content="Truss resources, AI chat assistant, estimate calculator, and terminology from Precision Structures Inc.">
+  <meta property="og:title" content="Resources | Precision Structures Inc.">
+  <meta property="og:description" content="Truss resources, terminology, project planning guide, and common truss types from Precision Structures Inc.">
   <meta property="og:site_name" content="Precision Structures Inc.">
   <meta property="og:locale" content="en_US">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -105,7 +105,7 @@
   <!-- ============ TOP BAR ============ -->
   <div class="top-bar">
     <div class="top-bar-left">
-      <span>Proudly family-owned since 1990 &middot; Hooper, Utah</span>
+      <span>Precision Structures &middot; Hooper, Utah &middot; Est. 1990</span>
     </div>
     <div class="top-bar-right">
       <a href="tel:+18019853000">(801) 985-3000</a>
@@ -149,118 +149,17 @@
   <!-- ============ PAGE HEADER ============ -->
   <section class="page-header" id="main-content">
     <div class="breadcrumbs"><a href="index.html">Home</a> &gt; Resources</div>
-    <div class="section-label">Learn &amp; Estimate</div>
-    <h1 class="section-title">Resources &amp; AI Tools</h1>
-    <p class="section-subtitle">Everything you need to understand trusses and plan your project.</p>
+    <div class="section-label">Reference</div>
+    <h1 class="section-title">Resources</h1>
+    <p class="section-subtitle">Truss terminology, planning guides, and reference material for your next project.</p>
   </section>
 
-  <!-- ============ AI TOOLS ============ -->
-  <section class="ai-tools reveal">
-    <div class="section-label">AI-Powered</div>
-    <h2 class="section-title">Smart Tools for Your Project</h2>
-    <div class="ai-tools-grid" style="grid-template-columns: repeat(3, 1fr);">
-
-      <!-- AI Chat Assistant -->
-      <div class="ai-tool-card">
-        <div class="ai-tool-icon">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="#C8922A" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
-        </div>
-        <h3>AI Chat Assistant</h3>
-        <p>Get instant answers about our services, truss terminology, pricing guidance, and the bid process. Our Claude-powered assistant is available 24/7.</p>
-        <div class="ai-badge">Powered by Claude AI</div>
-        <div style="margin-top: 1.5rem;">
-          <button onclick="document.getElementById('chatbot-toggle').click()" class="btn-blue" style="border:none;cursor:pointer;">Start Chatting</button>
-        </div>
-      </div>
-
-      <!-- Instant Estimate Calculator -->
-      <div class="ai-tool-card">
-        <div class="ai-tool-icon">
-          <span style="font-size:1.6rem;">&#128425;</span>
-        </div>
-        <h3>Instant Estimate Calculator</h3>
-        <p>Get a rough ballpark estimate for your truss project in seconds. Enter your specifications below for an approximate price range.</p>
-        <div class="ai-badge">AI-Powered Estimates</div>
-        <div style="margin-top: 1.5rem;">
-          <a href="#estimate" class="btn-blue">Calculate Estimate</a>
-        </div>
-      </div>
-
-      <!-- Project Planner -->
-      <div class="ai-tool-card">
-        <div class="ai-tool-icon">
-          <span style="font-size:1.6rem;">&#128203;</span>
-        </div>
-        <h3>Project Planning Guide</h3>
-        <p>Not sure what information you need for a bid? Our guide walks you through everything to include when requesting a quote.</p>
-        <div class="ai-badge">Interactive Guide</div>
-        <div style="margin-top: 1.5rem;">
-          <a href="#planning-guide" class="btn-outline">View Guide</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============ ESTIMATE CALCULATOR ============ -->
-  <section class="estimate-section reveal" id="estimate">
-    <div class="section-label">Quick Estimate</div>
-    <h2 class="section-title">Truss Cost Calculator</h2>
-    <p class="section-subtitle">Get a rough estimate for budgeting purposes. For accurate pricing, contact us with your plans.</p>
-
-    <div class="estimate-form-wrap">
-      <!-- Truss Type -->
-      <div class="f-group" style="margin-bottom:1.2rem;">
-        <label class="f-label" for="est-type">Truss Type</label>
-        <select id="est-type" class="f-select">
-          <option value="roof">Roof Truss</option>
-          <option value="floor">Floor Truss</option>
-        </select>
-      </div>
-
-      <!-- Span + Pitch -->
-      <div class="form-row" style="margin-bottom:1.2rem;">
-        <div class="f-group">
-          <label class="f-label" for="est-span">Span (feet)</label>
-          <input type="number" id="est-span" class="f-input" min="8" max="100" placeholder="e.g. 32">
-        </div>
-        <div class="f-group">
-          <label class="f-label" for="est-pitch">Pitch</label>
-          <select id="est-pitch" class="f-select">
-            <option value="2/12">2/12</option>
-            <option value="3/12">3/12</option>
-            <option value="4/12" selected>4/12</option>
-            <option value="5/12">5/12</option>
-            <option value="6/12">6/12</option>
-            <option value="7/12">7/12</option>
-            <option value="8/12">8/12</option>
-            <option value="9/12">9/12</option>
-            <option value="10/12">10/12</option>
-            <option value="12/12">12/12</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Quantity -->
-      <div class="f-group" style="margin-bottom:1.5rem;">
-        <label class="f-label" for="est-qty">Quantity</label>
-        <input type="number" id="est-qty" class="f-input" min="1" placeholder="e.g. 24">
-      </div>
-
-      <!-- Calculate Button -->
-      <button onclick="calculateEstimate()" class="btn-blue" style="border:none;cursor:pointer;width:100%;text-align:center;">Calculate Estimate</button>
-
-      <!-- Result -->
-      <div id="estimate-result" class="estimate-result">
-        <div class="est-label">Estimated Range</div>
-        <div class="est-value"></div>
-        <div class="est-note"></div>
-      </div>
-
-      <!-- Disclaimer -->
-      <p style="font-size:0.78rem;color:var(--mid);line-height:1.6;margin-top:1.5rem;">
-        This is a rough estimate only. Actual pricing depends on engineering, materials, delivery, and project specifics. Contact us for an accurate bid.
-      </p>
+  <!-- ============ PLANNING GUIDE INTRO ============ -->
+  <section style="padding:40px 8vw 0;background:var(--white);" class="reveal">
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <a href="#planning-guide" class="btn-outline">Bid Request Guide</a>
+      <a href="#terminology" class="btn-outline">Truss Terminology</a>
+      <a href="#truss-types" class="btn-outline">Common Truss Types</a>
     </div>
   </section>
 
@@ -413,7 +312,7 @@
   </section>
 
   <!-- ============ COMMON TRUSS TYPES ============ -->
-  <section style="padding:80px 8vw;background:var(--white);" class="reveal">
+  <section id="truss-types" style="padding:80px 8vw;background:var(--white);" class="reveal">
     <div class="section-label">Truss Profiles</div>
     <h2 class="section-title">Common Truss Types</h2>
     <p class="section-subtitle">Each truss type is designed for specific structural and architectural needs.</p>
@@ -551,7 +450,7 @@
     <div class="footer-top">
       <div>
         <div class="footer-brand-name">Precision <span>Structures</span> Inc.</div>
-        <p class="footer-tagline">Family-owned truss manufacturing in Hooper, Utah since 1990. Precision-engineered roof and floor truss systems delivered across the Rocky Mountain region.</p>
+        <p class="footer-tagline">Engineered truss manufacturing in Hooper, Utah since 1990. Roof trusses, floor trusses, and custom engineering for contractors across the Rocky Mountain region.</p>
         <div class="footer-social">
           <a href="https://facebook.com/Precisionstructures/" target="_blank" rel="noopener" aria-label="Facebook">Fb</a>
           <a href="https://instagram.com/precision_structures_ut/" target="_blank" rel="noopener" aria-label="Instagram">Ig</a>
@@ -588,14 +487,13 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">&copy; 2026 Precision Structures Inc. &mdash; Hooper, Utah. Family owned since 1990.</span>
+      <span class="footer-copy">&copy; 2026 Precision Structures Inc. &mdash; Hooper, Utah. Est. 1990.</span>
       <a href="tel:+18019853000" class="footer-phone">(801) 985-3000</a>
     </div>
   </footer>
 
   <!-- ============ SCRIPTS ============ -->
   <script src="js/main.js"></script>
-  <script src="js/chatbot.js"></script>
 
 </body>
 </html>
